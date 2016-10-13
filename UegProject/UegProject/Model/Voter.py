@@ -23,10 +23,8 @@ class Voter(object):
         self.__regionType = region_type
         self.__requiredPhotoFlag = required_photo_flag
 
-
     def setrequiredphoto(self):
         self.__requiredPhotoFlag = True
-
 
     # MANLY PYTHON WAY OF GETTER AND SETTER ->
     # http://www.python-course.eu/python3_properties.php
