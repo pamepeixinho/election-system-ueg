@@ -16,6 +16,11 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
+from UegProject import Comunicacao
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^teste/', Comunicacao.teste1, name='teste1'),
+    url(r'^teste2/', Comunicacao.teste2, name='teste2'),
+    url(r'^', Comunicacao.teste, name='teste'),
 ]
