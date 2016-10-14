@@ -1,6 +1,7 @@
 import simplejson as simplejson
 from django.http import HttpResponse
 from django.http import JsonResponse
+from numpy.distutils.fcompiler import none
 
 
 def teste(request):
@@ -31,9 +32,13 @@ def teste3(request, uev_id):
 
 
 def teste4(request):
+
+    query = request.GET.get('query')
     uev_id = request.GET.get('uev_id')
+
     uevJson = {
         'uev_id': uev_id,
+        'query': query,
     }
 
     data = simplejson.dumps(uevJson)

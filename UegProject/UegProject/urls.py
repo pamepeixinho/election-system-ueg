@@ -24,8 +24,8 @@ urlpatterns = [
     url(r'^teste/', Comunicacao.teste1, name='teste1'),
     url(r'^teste2/', Comunicacao.teste2, name='teste2'),
 
-    # TODO fix urls with arguments
-    # url(r'^teste3/(?P<uev_id>\d+)/$', Comunicacao.teste3, name='teste3'),
-    # url(r'^teste4/(?P<uev_id>\W+)$', Comunicacao.teste4, name='teste4'),
+    url(r'^teste3/(?P<uev_id>\d+)/$', Comunicacao.teste3, name='teste3'),
 
+    # use this URL to test http://127.0.0.1:8181/teste4/?query=uev&uev_id=12
+    url(r'^teste4/$', Comunicacao.teste4, name='teste4'),
 ]
