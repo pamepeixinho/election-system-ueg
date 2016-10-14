@@ -17,13 +17,15 @@ from django.conf.urls import url
 from django.contrib import admin
 
 from UegProject import Comunicacao
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', Comunicacao.teste, name='teste'),
+    url(r'^$', Comunicacao.teste, name='teste'),
     url(r'^teste/', Comunicacao.teste1, name='teste1'),
     url(r'^teste2/', Comunicacao.teste2, name='teste2'),
-    url(r'^teste3/(?P<uev_id>\d+)/$', Comunicacao.teste3, name='teste3'),
-    url(r'^teste4/(?P<uev_id>\W+)$', Comunicacao.teste4, name='teste4'),
+
+    # TODO fix urls with arguments
+    # url(r'^teste3/(?P<uev_id>\d+)/$', Comunicacao.teste3, name='teste3'),
+    # url(r'^teste4/(?P<uev_id>\W+)$', Comunicacao.teste4, name='teste4'),
 
 ]
-
