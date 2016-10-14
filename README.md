@@ -1,5 +1,3 @@
-# ElectionSystem_UEG
-
 Elections System - UEG (FEI)
 =========
 
