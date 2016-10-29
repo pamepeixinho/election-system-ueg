@@ -1,5 +1,3 @@
-from numpy.distutils.fcompiler import none
-
 
 class Ueg(object):
     """
@@ -11,8 +9,8 @@ class Ueg(object):
             AllElections: Elections
     """
 
-    uevs = none
-    allElections = none
+    uevs = None
+    allElections = None
 
     # TODO create constructor
     # def __init__(self):
@@ -22,14 +20,15 @@ class Ueg(object):
     def Ascertainment(self):
         return
 
+    # TODO hash login passowrd MD5
     def isValidUev(self, username, password):
         for uev in self.uevs:
             if uev.username == username and uev.password == password and uev.isActive():
                 return True
         return False
 
-    def isValidElection(self):
-        return self.allElections.typeOfCommunicationByElection()
+    def isValidElection(self, communicationType):
+        return self.allElections.typeOfCommunicationByElection(communicationType)
 
     # TODO finish functions
     def fillVotes(self):

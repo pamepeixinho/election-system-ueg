@@ -1,8 +1,6 @@
 import simplejson as simplejson
 from django.http import HttpResponse
 from django.http import JsonResponse
-from numpy.distutils.fcompiler import none
-
 
 def teste(request):
     return HttpResponse('Teste')
@@ -45,7 +43,7 @@ def teste4(request):
 
 
 class Communication(object):
-    ueg = none
+    ueg = None
 
     def sendData(self, request):
         username = request.GET.get('username')
