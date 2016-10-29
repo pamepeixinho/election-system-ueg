@@ -1,4 +1,4 @@
-from numpy.distutils.fcompiler import none
+#from numpy.distutils.fcompiler import none
 
 
 class Voter(object):
@@ -14,9 +14,9 @@ class Voter(object):
             regionType: Enum :py:obj: ~UegProject.Model.Types.RegionType`
     """
 
-    def __init__(self, name, cpf, voted_flag, region_type, photo_url=none):
+    def __init__(self, name, cpf, voted_flag, region, photo_url=""):
         self.__name = name
         self.__cpf = cpf
         self.__photoUrl = photo_url
         self.__votedFlag = voted_flag
-        self.__regionType = region_type
+        self.__regionType = region

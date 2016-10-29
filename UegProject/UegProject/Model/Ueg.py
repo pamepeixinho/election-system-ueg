@@ -1,4 +1,4 @@
-from numpy.distutils.fcompiler import none
+#from numpy.distutils.fcompiler import none
 
 
 class Ueg(object):

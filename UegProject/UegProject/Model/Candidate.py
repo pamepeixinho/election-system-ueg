@@ -1,6 +1,5 @@
-from numpy.distutils.fcompiler import none
 
-from UegProject.Model.Voter import Voter
+from Voter import Voter
 
 
 class Candidate(Voter):
@@ -23,10 +22,10 @@ class Candidate(Voter):
             regionType: Enum :py:obj: ~UegProject.Model.Types.RegionType`
     """
 
-    qntVotesPerRegion = none
+    qntVotesPerRegion = -1
 
-    def __init__(self, name, cpf, voted_flag, region_type, photo_url, number, role, nickname):
-        super.__init__(self, name, cpf, voted_flag, region_type, photo_url)
+    def __init__(self, name, cpf, voted_flag, region, photo_url, number, role, nickname):
+        super.__init__(self, name, cpf, voted_flag, region, photo_url)
         self.__number = number
         self.__role = role
         self.__nickname = nickname
