@@ -32,7 +32,6 @@ def teste3(request, uev_id):
 
 
 def teste4(request):
-
     query = request.GET.get('query')
     uev_id = request.GET.get('uev_id')
 
@@ -43,3 +42,20 @@ def teste4(request):
 
     data = simplejson.dumps(uevJson)
     return HttpResponse(data, content_type="application/json")
+
+
+class Communication(object):
+    ueg = none
+
+    def sendData(self, request):
+        username = request.GET.get('username')
+        password = request.GET.get('password')
+
+        uevJson = {
+            # TODO get array
+            'voter': 'eleitor',
+            'candidate': 'candidate',
+        }
+
+        data = simplejson.dumps(uevJson)
+        return HttpResponse(data, content_type="application/json")

@@ -3,6 +3,8 @@ from enum import Enum
 """
 Enumarate types of Regiao in Elections
 """
+
+
 class RoleType(Enum):
     PREFEITO = 0
     VEREADOR = 1

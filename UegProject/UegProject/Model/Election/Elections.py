@@ -1,3 +1,4 @@
+# coding=utf-8
 import datetime
 
 from UegProject.Model.Election.ElectionDate import ElectionDate
@@ -15,39 +16,54 @@ class Elections(object):
 
     def __init__(self, electionList):
         self.__electionsList = electionList
+        self.__toleranceMinutesStart = 10
+        self.__toleranceMinutesEnd = 60
 
-    def typeOfCommunicationByElection(self):
+    def validElectionByCommunicationType(self, communicationType):
 
         now = datetime.datetime.now()
 
         for electionDate in self.__electionsList:
             if electionDate.date == now.date():
-                dfstart = datetime.timedelta(hours=electionDate.startTime.hour, minutes=electionDate.startTime.minute,
-                                             seconds=0, microseconds=0)
-                dfend = datetime.timedelta(hours=electionDate.stopTime.hour, minutes=electionDate.stopTime.minute,
-                                           seconds=0, microseconds=0)
 
-                dfnow = datetime.timedelta(hours=now.hour, minutes=now.minute, seconds=0, microseconds=0)
+                print 'Mesma data'
 
-                if abs(dfnow - dfstart) < abs(dfnow - dfend):
-                    return CT.CARREGAMENTO
+                start = datetime.datetime(electionDate.date.year, electionDate.date.month, electionDate.date.day,
+                                          hour=electionDate.startTime.hour, minute=electionDate.startTime.minute)
+                end = datetime.datetime(electionDate.date.year, electionDate.date.month, electionDate.date.day,
+                                        hour=electionDate.stopTime.hour, minute=electionDate.stopTime.minute)
+
+                diff_start = now - start
+                diff_end = now - end
+
+                if communicationType == CT.CARREGAMENTO and datetime.timedelta(
+                        minutes=-self.__toleranceMinutesStart) < diff_start < datetime.timedelta(minutes=0):
+                    print 'CARREGAMENTO das Uevs até %dmin antes do inicio das eleições -> Válido' \
+                          % self.__toleranceMinutesStart
+                    return True
+
                 else:
-                    return CT.RECEBIMENTO
+                    if communicationType == CT.RECEBIMENTO and datetime.timedelta(
+                            minutes=0) < diff_end < datetime.timedelta(minutes=self.__toleranceMinutesEnd):
+                        print 'RECEBIMENTO dos Votos até %dmin depois do fim das eleições -> Válido'\
+                              % self.__toleranceMinutesEnd
+                        return True
+
+        return False
 
 
 #Just for testing
 def testingModel():
 
-    d0 = ElectionDate(2016, 10, 26, 8, 0, 18, 0)
-    d1 = ElectionDate(2016, 10, 27, 8, 0, 18, 0)
-    d2 = ElectionDate(2016, 10, 25, 8, 0, 18, 0)
-    d3 = ElectionDate(2016, 10, 24, 8, 0, 18, 0)
+    d0 = ElectionDate(2016, 10, 29, 19, 10, 20, 0)
+    d1 = ElectionDate(2016, 10, 30, 8, 0, 18, 0)
+    d2 = ElectionDate(2016, 10, 28, 8, 0, 18, 0)
+    d3 = ElectionDate(2016, 10, 29, 8, 0, 18, 0)
 
     list = [d0, d1, d2, d3]
 
     elections = Elections(list)
-
-    print elections.typeOfCommunicationByElection()
+    print elections.validElectionByCommunicationType(CT.CARREGAMENTO)
 
 
 testingModel()
