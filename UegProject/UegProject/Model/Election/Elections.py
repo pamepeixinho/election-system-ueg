@@ -40,7 +40,7 @@ class Elections(object):
                 diff_end = now - end
 
                 if communication_type == CT.CARREGAMENTO and datetime.timedelta(
-                        minutes=-10) <= diff_start <= datetime.timedelta(minutes=0):
+                        minutes=-self.__toleranceMinutesStart) <= diff_start <= datetime.timedelta(minutes=0):
                     print 'CARREGAMENTO das Uevs até %dmin antes do inicio das eleições -> Válido' \
                           % self.__toleranceMinutesStart
                     return True, end
@@ -58,7 +58,7 @@ class Elections(object):
     @staticmethod
     def testingElectionsModel():
         d0 = ElectionDate(2016, 10, 29, 19, 10, 20, 0)
-        d1 = ElectionDate(2016, 10, 30, 20, 40, 19, 50)
+        d1 = ElectionDate(2016, 10, 30, 21, 30, 15, 0)
         d2 = ElectionDate(2016, 10, 28, 8, 0, 18, 0)
         d3 = ElectionDate(2016, 10, 29, 8, 0, 18, 0)
 

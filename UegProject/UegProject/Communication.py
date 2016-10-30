@@ -1,5 +1,8 @@
+import json
 from django.http import HttpResponse
+from django.http import HttpResponseForbidden
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from UegProject.ErrorCodes import ErrorCodes
 from UegProject.Model.Candidate import Candidate
@@ -28,19 +31,31 @@ class Communication(object):
 
         authenticated = self.__authenticate(username, password, CT.CARREGAMENTO)
         if authenticated is not True:
-            return HttpResponse('ERRO {0}'.format(authenticated))
+            return HttpResponseForbidden('ERRO {0}'.format(authenticated))
 
         uev_json = self.__getUevJson()
 
         return JsonResponse(uev_json, safe=False)
 
+    @csrf_exempt
     def recieveData(self, request):
+        """
+        curl -H "Content-Type: application/json" -X POST -d '{"username":"pamela","password":"81dc9bdb52d04dc20036dbd8313ed055", "voters":"v", "candidates":"c", "nullVotes":"null", "whiteVotes":"null"}' 127.0.0.1:8181/results/
+        """
         if request.method != 'POST':
             return HttpResponse(ErrorCodes.WRONG_REQUEST)
-        json = request.read()
-        print json
-        print 'post'
+        json_data = json.loads(request.body)
 
+        self.__verifyIfNew()
+
+        authenticated = self.__authenticate(json_data["username"], json_data["password"], CT.RECEBIMENTO)
+        if authenticated is not True:
+            return HttpResponseForbidden('ERRO {0}'.format(authenticated))
+
+        self.ueg.fillVotes(json_data["voters"], json_data["candidates"],
+                           json_data["nullVotes"], json_data["whiteVotes"])
+
+        return HttpResponse('OK')
 
     def __getUevJson(self):
         uev_json = {

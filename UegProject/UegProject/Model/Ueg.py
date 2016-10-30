@@ -15,7 +15,11 @@ class Ueg(object):
 
     uevs = None
     allElections = None
+    # TODO elections variables---
     endElectionToday = None
+    nullVotes = None
+    whiteVotes = None
+
 
     # TODO create constructor -> get all data from DataAccess
     def __init__(self):
@@ -43,7 +47,9 @@ class Ueg(object):
         return valid_election
 
     # TODO finish functions
-    def fillVotes(self):
+    def fillVotes(self, votes_voters, votes_candidates, null_votes, white_votes):
+        # dataaccess.updatecandidates
+        # dataaccess.updatevoters
         return
 
     def getVotesPerUev(self):
