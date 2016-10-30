@@ -20,7 +20,7 @@ class Ueg(object):
         # self.uevs = getList from DataAccess
         # self.allElections = getList from DataAccess
         self.uevs = [
-            Uev("pamela", "123", "regiao", "voters", "candidates", 1),
+            Uev("pamela", "1234", "regiao", "voters", "candidates", 1),
             Uev("admin", "admin", "regiao", "voters", "candidates", 1)
         ]
         self.allElections = Elections.testingElectionsModel()

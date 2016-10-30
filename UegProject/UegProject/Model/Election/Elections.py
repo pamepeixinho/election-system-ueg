@@ -37,7 +37,7 @@ class Elections(object):
                                         hour=electionDate.stopTime.hour, minute=electionDate.stopTime.minute)
 
                 diff_start = now - start
-                diff_end = end - now
+                diff_end = now - end
 
                 if communicationType == CT.CARREGAMENTO and datetime.timedelta(
                         minutes=-10) <= diff_start <= datetime.timedelta(minutes=0):
@@ -47,7 +47,7 @@ class Elections(object):
 
                 else:
                     if communicationType == CT.RECEBIMENTO and datetime.timedelta(
-                            minutes=0) < diff_end < datetime.timedelta(minutes=self.__toleranceMinutesEnd):
+                            minutes=0) <= diff_end <= datetime.timedelta(minutes=self.__toleranceMinutesEnd):
                         print 'RECEBIMENTO dos Votos até %dmin depois do fim das eleições -> Válido' \
                               % self.__toleranceMinutesEnd
                         return True
