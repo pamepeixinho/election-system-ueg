@@ -20,14 +20,6 @@ from UegProject import Communication
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', Communication.teste, name='teste'),
-    url(r'^teste/', Communication.teste1, name='teste1'),
-    url(r'^teste2/', Communication.teste2, name='teste2'),
-
-    url(r'^teste3/(?P<uev_id>\d+)/$', Communication.teste3, name='teste3'),
-
-    # use this URL to test http://127.0.0.1:8181/teste4/?query=uev&uev_id=12
-    url(r'^teste4/$', Communication.teste4, name='teste4'),
-
-    url(r'^carregar/$', Communication.Communication.sendData, name='carregar'),
+    url(r'^$', Communication.Communication.home, name='home'),
+    url(r'^load/$', Communication.Communication().sendData, name='load'),
 ]

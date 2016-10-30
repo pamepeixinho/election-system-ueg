@@ -1,59 +1,77 @@
-import simplejson as simplejson
 from django.http import HttpResponse
 from django.http import JsonResponse
 
-def teste(request):
-    return HttpResponse('Teste')
-
-
-def teste1(request):
-    return JsonResponse({'Json': 'teste'})
-
-
-def teste2(request):
-    some_data_to_dump = {
-        'some_var_1': 'foo',
-        'some_var_2': 'bar',
-    }
-
-    data = simplejson.dumps(some_data_to_dump)
-    return HttpResponse(data, content_type="application/json")
-
-
-def teste3(request, uev_id):
-    uevJson = {
-        'uev_id': uev_id,
-    }
-
-    data = simplejson.dumps(uevJson)
-    return HttpResponse(data, content_type="application/json")
-
-
-def teste4(request):
-    query = request.GET.get('query')
-    uev_id = request.GET.get('uev_id')
-
-    uevJson = {
-        'uev_id': uev_id,
-        'query': query,
-    }
-
-    data = simplejson.dumps(uevJson)
-    return HttpResponse(data, content_type="application/json")
+from UegProject.ErrorCodes import ErrorCodes
+from UegProject.Model.Candidate import Candidate
+from UegProject.Model.Region import Region
+from UegProject.Model.Types.RoleType import RoleType
+from UegProject.Model.Ueg import Ueg
+from UegProject.Model.Voter import Voter
+from UegProject.Model.Types.CommunicationType import CommunicationType as CT
 
 
 class Communication(object):
     ueg = None
 
+    @staticmethod
+    def home(request):
+        return HttpResponse('UEG')
+
+    @staticmethod
+    def __testingWithVotersArray():
+        r = Region("Sao Paulo", "Sao Paulo", "Brasil")
+        r2 = Region("Sao Bernardo do Campo", "Sao Paulo", "Brasil")
+        vt1 = [Voter("Pamela", 123, False, r),
+               Voter("Andre", 124, False, r),
+               Voter("Ahmad", 125, False, r2),
+               Voter("Marco", 126, False, r)]
+        return vt1
+
+    @staticmethod
+    def __testingWithCandidatesArray():
+        r = Region("Sao Paulo", "Sao Paulo", "Brasil")
+        r2 = Region("Sao Bernardo do Campo", "Sao Paulo", "Brasil")
+        vt2 = [Candidate("Pamela", 123, False, r, "url", 102, RoleType.DEPUTADO, "peixinho"),
+               Candidate("Andre", 124, False, r, "url", 103, RoleType.PREFEITO, "dede"),
+               Candidate("Ahmad", 125, False, r2, "url", 104, RoleType.PREFEITO, "mud"),
+               Candidate("Marco", 126, False, r, "url", 105, RoleType.GOVERNADOR, "maco")]
+        return vt2
+
     def sendData(self, request):
+        if request.method != 'GET':
+            return HttpResponse(ErrorCodes.WRONG_REQUEST)
+
         username = request.GET.get('username')
         password = request.GET.get('password')
 
-        uevJson = {
-            # TODO get array
-            'voter': 'eleitor',
-            'candidate': 'candidate',
-        }
+        self.__verifyIfNew()
 
-        data = simplejson.dumps(uevJson)
-        return HttpResponse(data, content_type="application/json")
+        # TODO call Authenticate
+        authenticated = self.__authenticate(username, password, CT.CARREGAMENTO)
+        if authenticated != True:
+            return HttpResponse('ERRO {0}'.format(authenticated))
+
+        uevJson = {
+            # TODO get array BY UEG
+            # "Eleitores": [v.toJSON() for v in self.ueg.getAllVoter()]
+            # "Candidatos": [c.toJSON() for c in self.ueg.getAllCandidates()]
+            "Eleitores": [v.toJSON() for v in self.__testingWithVotersArray()],
+            "Candidatos": [c.toJSON() for c in self.__testingWithCandidatesArray()],
+        }
+        return JsonResponse(uevJson, safe=False)
+
+    # TODO change function name
+    # TODO verify requirement of this function and usage (Diagrams TOO)
+    def __verifyIfNew(self):
+        if self.ueg is None:
+            self.ueg = Ueg()
+
+    # TODO verify and update __authenticate usage in diagrams
+    def __authenticate(self, username, password, communicationType):
+        if self.ueg.isValidUev(username=username, password=password):
+            if self.ueg.isValidElection(communicationType):
+                return True
+            else:
+                return ErrorCodes.INVALID_TIME_ELECTION
+        else:
+            return ErrorCodes.INVALID_UEV

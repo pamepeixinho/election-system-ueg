@@ -1,3 +1,6 @@
+from UegProject.Model.Election import Elections
+from UegProject.Model.Uev import Uev
+
 
 class Ueg(object):
     """
@@ -12,13 +15,19 @@ class Ueg(object):
     uevs = None
     allElections = None
 
-    # TODO create constructor
-    # def __init__(self):
+    # TODO create constructor -> get all data from DataAccess
+    def __init__(self):
         # self.uevs = getList from DataAccess
         # self.allElections = getList from DataAccess
+        self.uevs = [
+            Uev("pamela", "123", "regiao", "voters", "candidates", 1),
+            Uev("admin", "admin", "regiao", "voters", "candidates", 1)
+        ]
+        self.allElections = Elections.testingElectionsModel()
+
 
     def Ascertainment(self):
-        return
+        return 1
 
     # TODO hash login passowrd MD5
     def isValidUev(self, username, password):
@@ -28,7 +37,7 @@ class Ueg(object):
         return False
 
     def isValidElection(self, communicationType):
-        return self.allElections.typeOfCommunicationByElection(communicationType)
+        return self.allElections.isValidElectionByCommunicationType(communicationType)
 
     # TODO finish functions
     def fillVotes(self):

@@ -25,6 +25,13 @@ class Candidate(Voter):
 
     def __init__(self, name, cpf, voted_flag, region, photo_url, number, role, nickname):
         super(Candidate, self).__init__(name, cpf, voted_flag, region, photo_url)
-        self.__number = number
-        self.__role = role
-        self.__nickname = nickname
+        self.number = number
+        self.role = role
+        self.nickname = nickname
+
+    def toJSON(self):
+        return {'name': self.name,
+                'number': self.number,
+                'role': self.role,
+                'nickname': self.nickname,
+                'photoURL': self.photoUrl}

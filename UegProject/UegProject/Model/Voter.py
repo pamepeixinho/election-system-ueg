@@ -1,3 +1,7 @@
+import json
+
+import simplejson
+
 
 class Voter(object):
     """
@@ -13,8 +17,14 @@ class Voter(object):
     """
 
     def __init__(self, name, cpf, voted_flag, region, photo_url=None):
-        self.__name = name
-        self.__cpf = cpf
-        self.__photoUrl = photo_url
-        self.__votedFlag = voted_flag
-        self.__region = region
+        self.name = name
+        self.cpf = cpf
+        self.photoUrl = photo_url
+        self.votedFlag = voted_flag
+        self.region = region
+
+    # TODO add in Diagram
+    def toJSON(self):
+        return {'name': self.name,
+                'cpf': self.cpf,
+                'photoURL': self.photoUrl}
