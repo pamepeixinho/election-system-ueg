@@ -1,8 +1,3 @@
-import json
-
-import simplejson
-
-
 class Voter(object):
     """
     ======

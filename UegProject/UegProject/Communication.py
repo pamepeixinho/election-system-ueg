@@ -34,17 +34,28 @@ class Communication(object):
 
         return JsonResponse(uev_json, safe=False)
 
+    def recieveData(self, request):
+        if request.method != 'POST':
+            return HttpResponse(ErrorCodes.WRONG_REQUEST)
+        json = request.read()
+        print json
+        print 'post'
+
+
     def __getUevJson(self):
         uev_json = {
-            # TODO get array BY UEG
+            "electionEnd": self.ueg.endElectionToday.time(),
+
+            # TODO get array BY UEG -----------
             # "Eleitores": [v.toJSON() for v in self.ueg.getAllVoter()]
             # "Candidatos": [c.toJSON() for c in self.ueg.getAllCandidates()]
-            "Eleitores": [v.toJSON() for v in self.__testingWithVotersArray()],
-            "Candidatos": [c.toJSON() for c in self.__testingWithCandidatesArray()],
+            # TODO ----------------------------
+
+            "voters": [v.toJSON() for v in self.__testingWithVotersArray()],
+            "candidates": [c.toJSON() for c in self.__testingWithCandidatesArray()],
         }
         return uev_json
 
-    # TODO change function name
     # TODO verify requirement of this function and usage (Diagrams TOO)
     def __verifyIfNew(self):
         if self.ueg is None:

@@ -4,7 +4,6 @@ from enum import Enum
 Enumarate types of Errors in Communication mainly
 """
 
-
 # TODO put this enum in Class Diagram
 class ErrorCodes(Enum):
     INVALID_UEV = -1

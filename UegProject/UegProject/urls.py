@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', Communication.Communication.home, name='home'),
     url(r'^load/$', Communication.Communication().sendData, name='load'),
+    url(r'^results/$', Communication.Communication().sendData, name='load'),
 ]

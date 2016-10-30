@@ -15,6 +15,7 @@ class Ueg(object):
 
     uevs = None
     allElections = None
+    endElectionToday = None
 
     # TODO create constructor -> get all data from DataAccess
     def __init__(self):
@@ -37,8 +38,9 @@ class Ueg(object):
                 return True
         return False
 
-    def isValidElection(self, communicationType):
-        return self.allElections.isValidElectionByCommunicationType(communicationType)
+    def isValidElection(self, communication_type):
+        valid_election, self.endElectionToday = self.allElections.validElectionByCommunicationType(communication_type)
+        return valid_election
 
     # TODO finish functions
     def fillVotes(self):
