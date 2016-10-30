@@ -62,8 +62,8 @@ class Communication(object):
             "electionEnd": self.ueg.endElectionToday.time(),
 
             # TODO get array BY UEG -----------
-            # "Eleitores": [v.toJSON() for v in self.ueg.getAllVoter()]
-            # "Candidatos": [c.toJSON() for c in self.ueg.getAllCandidates()]
+            # "Eleitores": [v.toJSON() for v in self.ueg.getVotersPerUev()]
+            # "Candidatos": [c.toJSON() for c in self.ueg.getCandidatesPerUev()]
             # TODO ----------------------------
 
             "voters": [v.toJSON() for v in self.__testingWithVotersArray()],

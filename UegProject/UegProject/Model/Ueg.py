@@ -19,6 +19,7 @@ class Ueg(object):
     endElectionToday = None
     nullVotes = None
     whiteVotes = None
+    currentUev = None
 
 
     # TODO create constructor -> get all data from DataAccess
@@ -39,6 +40,7 @@ class Ueg(object):
         for uev in self.uevs:
             hash_password = hashlib.md5(uev.password).hexdigest()
             if uev.username == username and hash_password == password and uev.isActive():
+                self.currentUev = uev
                 return True
         return False
 
@@ -52,17 +54,24 @@ class Ueg(object):
         # dataaccess.updatevoters
         return
 
-    def getVotesPerUev(self):
-        return
+    def getVotersPerUev(self):
+        return self.currentUev.getVoters()
 
     def getCandidatesPerUev(self):
-        return
+        return self.currentUev.getCandidates()
+
 
     def getAllCandidates(self):
-        return
+        candidates = []
+        for uev in self.uevs:
+            candidates.append(uev.getCandidates())
+        return candidates
 
     def getAllVoters(self):
-        return
+        voters = []
+        for uev in self.uevs:
+            voters.append(uev.getVoters())
+        return voters
 
     def getAllUevs(self):
-        return
+        return self.uevs
