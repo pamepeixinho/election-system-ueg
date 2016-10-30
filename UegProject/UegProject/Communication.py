@@ -17,6 +17,49 @@ class Communication(object):
     def home(request):
         return HttpResponse('UEG')
 
+    def sendData(self, request):
+        if request.method != 'GET':
+            return HttpResponse(ErrorCodes.WRONG_REQUEST)
+
+        username = request.GET.get('username')
+        password = request.GET.get('password')
+
+        self.__verifyIfNew()
+
+        authenticated = self.__authenticate(username, password, CT.CARREGAMENTO)
+        if authenticated is not True:
+            return HttpResponse('ERRO {0}'.format(authenticated))
+
+        uev_json = self.__getUevJson()
+
+        return JsonResponse(uev_json, safe=False)
+
+    def __getUevJson(self):
+        uev_json = {
+            # TODO get array BY UEG
+            # "Eleitores": [v.toJSON() for v in self.ueg.getAllVoter()]
+            # "Candidatos": [c.toJSON() for c in self.ueg.getAllCandidates()]
+            "Eleitores": [v.toJSON() for v in self.__testingWithVotersArray()],
+            "Candidatos": [c.toJSON() for c in self.__testingWithCandidatesArray()],
+        }
+        return uev_json
+
+    # TODO change function name
+    # TODO verify requirement of this function and usage (Diagrams TOO)
+    def __verifyIfNew(self):
+        if self.ueg is None:
+            self.ueg = Ueg()
+
+    # TODO verify and update __authenticate usage in diagrams
+    def __authenticate(self, username, password, communicationType):
+        if self.ueg.isValidUev(username=username, password=password):
+            if self.ueg.isValidElection(communicationType):
+                return True
+            else:
+                return ErrorCodes.INVALID_TIME_ELECTION
+        else:
+            return ErrorCodes.INVALID_UEV
+
     @staticmethod
     def __testingWithVotersArray():
         r = Region("Sao Paulo", "Sao Paulo", "Brasil")
@@ -36,42 +79,3 @@ class Communication(object):
                Candidate("Ahmad", 125, False, r2, "url", 104, RoleType.PREFEITO, "mud"),
                Candidate("Marco", 126, False, r, "url", 105, RoleType.GOVERNADOR, "maco")]
         return vt2
-
-    def sendData(self, request):
-        if request.method != 'GET':
-            return HttpResponse(ErrorCodes.WRONG_REQUEST)
-
-        username = request.GET.get('username')
-        password = request.GET.get('password')
-
-        self.__verifyIfNew()
-
-        # TODO call Authenticate
-        authenticated = self.__authenticate(username, password, CT.CARREGAMENTO)
-        if authenticated != True:
-            return HttpResponse('ERRO {0}'.format(authenticated))
-
-        uevJson = {
-            # TODO get array BY UEG
-            # "Eleitores": [v.toJSON() for v in self.ueg.getAllVoter()]
-            # "Candidatos": [c.toJSON() for c in self.ueg.getAllCandidates()]
-            "Eleitores": [v.toJSON() for v in self.__testingWithVotersArray()],
-            "Candidatos": [c.toJSON() for c in self.__testingWithCandidatesArray()],
-        }
-        return JsonResponse(uevJson, safe=False)
-
-    # TODO change function name
-    # TODO verify requirement of this function and usage (Diagrams TOO)
-    def __verifyIfNew(self):
-        if self.ueg is None:
-            self.ueg = Ueg()
-
-    # TODO verify and update __authenticate usage in diagrams
-    def __authenticate(self, username, password, communicationType):
-        if self.ueg.isValidUev(username=username, password=password):
-            if self.ueg.isValidElection(communicationType):
-                return True
-            else:
-                return ErrorCodes.INVALID_TIME_ELECTION
-        else:
-            return ErrorCodes.INVALID_UEV

@@ -1,6 +1,7 @@
-from UegProject.Model.Election import Elections
+from UegProject.Model.Election.Elections import Elections
 from UegProject.Model.Uev import Uev
 
+import hashlib
 
 class Ueg(object):
     """
@@ -25,14 +26,14 @@ class Ueg(object):
         ]
         self.allElections = Elections.testingElectionsModel()
 
-
     def Ascertainment(self):
         return 1
 
     # TODO hash login passowrd MD5
     def isValidUev(self, username, password):
         for uev in self.uevs:
-            if uev.username == username and uev.password == password and uev.isActive():
+            hash_password = hashlib.md5(uev.password).hexdigest()
+            if uev.username == username and hash_password == password and uev.isActive():
                 return True
         return False
 

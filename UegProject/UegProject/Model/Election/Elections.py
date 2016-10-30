@@ -55,18 +55,19 @@ class Elections(object):
         return False
 
 
-# Just for testing
-def testingElectionsModel():
-    d0 = ElectionDate(2016, 10, 29, 19, 10, 20, 0)
-    d1 = ElectionDate(2016, 10, 30, 19, 54, 19, 50)
-    d2 = ElectionDate(2016, 10, 28, 8, 0, 18, 0)
-    d3 = ElectionDate(2016, 10, 29, 8, 0, 18, 0)
+    # Just for testing
+    @staticmethod
+    def testingElectionsModel():
+        d0 = ElectionDate(2016, 10, 29, 19, 10, 20, 0)
+        d1 = ElectionDate(2016, 10, 30, 20, 10, 19, 50)
+        d2 = ElectionDate(2016, 10, 28, 8, 0, 18, 0)
+        d3 = ElectionDate(2016, 10, 29, 8, 0, 18, 0)
 
-    list = [d0, d1, d2, d3]
+        list = [d0, d1, d2, d3]
 
-    elections = Elections(list)
-    print elections.isValidElectionByCommunicationType(CT.CARREGAMENTO)
-    return elections
+        elections = Elections(list)
+        print elections.isValidElectionByCommunicationType(CT.CARREGAMENTO)
+        return elections
 
 
 # testingElectionsModel()
