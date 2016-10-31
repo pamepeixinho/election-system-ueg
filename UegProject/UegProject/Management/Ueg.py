@@ -1,7 +1,12 @@
-from UegProject.Model.Election.Elections import Elections
-from UegProject.Model.Uev import Uev
-
 import hashlib
+
+from UegProject.Management.Reports import Reports
+from UegProject.Model.Election.Candidate import Candidate
+from UegProject.Model.Election.Elections import Elections
+from UegProject.Model.Election.Region import Region
+from UegProject.Model.Election.Uev import Uev
+from UegProject.Model.Types.RoleType import RoleType
+
 
 class Ueg(object):
     """
@@ -21,19 +26,26 @@ class Ueg(object):
     whiteVotes = None
     currentUev = None
 
-
     # TODO create constructor -> get all data from DataAccess
     def __init__(self):
         # self.uevs = getList from DataAccess
         # self.allElections = getList from DataAccess
         self.uevs = [
-            Uev("pamela", "1234", "regiao", "voters", "candidates", 1),
-            Uev("admin", "admin", "regiao", "voters", "candidates", 1)
+            Uev("pamela", "1234", Region("regiao1", "sao paulo", "Brasil"), "voters", "candidates", 1),
+            Uev("admin", "admin", Region("regiao2", "sao paulo", "Brasil"), "voters", "candidates", 1)
         ]
         self.allElections = Elections.testingElectionsModel()
 
     def Ascertainment(self):
+        # Reports.report_total_votes(self.getAllCandidates())
+        candidates = Ueg.testingWithCandidatesArray()
+        self.testingVotes(candidates)
+        Reports.report_total_votes(candidates)
         return 1
+
+    def testingVotes(self, candidates):
+        for c in (0, 1, 2, 3):
+            candidates[c].setVotesPerRegion("regiao_a", c+10)
 
     # TODO hash login passowrd MD5
     def isValidUev(self, username, password):
@@ -52,6 +64,9 @@ class Ueg(object):
     def fillVotes(self, votes_voters, votes_candidates, null_votes, white_votes):
         # dataaccess.updatecandidates
         # dataaccess.updatevoters
+        # TODO verify
+        # for candidate in self.currentUev.getCandidates():
+        # candidate.setVotesPerRegion(self.currentUev.region.city, 100)
         return
 
     def getVotersPerUev(self):
@@ -59,7 +74,6 @@ class Ueg(object):
 
     def getCandidatesPerUev(self):
         return self.currentUev.getCandidates()
-
 
     def getAllCandidates(self):
         candidates = []
@@ -75,3 +89,17 @@ class Ueg(object):
 
     def getAllUevs(self):
         return self.uevs
+
+    @staticmethod
+    def testingWithCandidatesArray():
+        r = Region("Sao Paulo", "Sao Paulo", "Brasil")
+        r2 = Region("Sao Bernardo do Campo", "Sao Paulo", "Brasil")
+        vt2 = [Candidate("Darth Vader", 123, False, r, "0.0.0.0:8181/candidate/vader/photo", 102,
+                         RoleType.DEPUTADO, "vaderzin"),
+               Candidate("Andre", 124, False, r, "url", 103, RoleType.PREFEITO, "dede"),
+               Candidate("Ahmad", 125, False, r2, "url", 104, RoleType.PREFEITO, "mud"),
+               Candidate("Pamela", 126, False, r, "0.0.0.0:8181/candidate/peixinho/photo", 105,
+                         RoleType.GOVERNADOR, "peixinho")]
+        return vt2
+ueg = Ueg()
+ueg.Ascertainment()
