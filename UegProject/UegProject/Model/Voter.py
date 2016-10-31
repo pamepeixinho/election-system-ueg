@@ -16,7 +16,10 @@ class Voter(object):
 
     def __init__(self, name, cpf, voted_flag, region, photo_url=""):
         self.__name = name
-        self.__cpf = cpf
+        self.cpf = cpf
         self.__photoUrl = photo_url
         self.__votedFlag = voted_flag
         self.__regionType = region
+
+    def setVotedFlag(self):
+        self.__votedFlag = 1

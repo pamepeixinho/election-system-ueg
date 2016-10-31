@@ -5,11 +5,10 @@ from Model.Voter import Voter
 from Model.Region import Region
 from Model.Uev import Uev
 from Model.Candidate import Candidate
+import abc
 
 class DataAccess:
-
-    def __init__(self):
-        self._connect_database()
+    __metaclass__ = abc.ABCMeta
 
     def _connect_database(self):
         try:
@@ -26,6 +25,8 @@ class DataAccess:
 
 
     def getUevList(self):
+        self._connect_database()
+
         queryVoters = "SELECT EL.nome, EL.cpf, EL.URL, C.Cidade, E.Estado, P.Pais " \
                       "FROM tb_eleitor AS EL " \
                       "INNER JOIN tb_cidade AS C ON EL.Cidade_id = C.Cidade_id " \
@@ -66,15 +67,39 @@ class DataAccess:
 
         for uev in self.__uevList:
             for candidate in self.__candidateListDB:
-                if(candidate[8] == "Presidente"):
-                    uev.addCandidate(Candidate())
+                if candidate[8] == "Presidente":
+                    uev.addCandidate(Candidate(candidate[0], candidate[1], candidate[2], Region(candidate[3],
+                    candidate[4], candidate[5]), candidate[6], candidate[7], candidate[8], candidate[0]))
+                elif candidate[8] == "Deputado" or candidate[8] == "Governador":
+                    if candidate[4] == uev.region.state:
+                        uev.addCandidate(Candidate(candidate[0], candidate[1], candidate[2], Region(candidate[3],
+                        candidate[4], candidate[5]), candidate[6], candidate[7], candidate[8], candidate[0]))
+                else:
+                    if candidate[3] == uev.region.city:
+                        uev.addCandidate(Candidate(candidate[0], candidate[1], candidate[2], Region(candidate[3],
+                        candidate[4], candidate[5]), candidate[6], candidate[7], candidate[8], candidate[0]))
 
-    #
-    # def setVotesPerCandidate(self, candidates):
+        self.__db.close()
+        return self.__uevList
+
+    def setVotesPerCandidate(self, candidate):
+        self._connect_database()
+
+        queryUpdateVotes = "UPDATE tb_candidato " \
+                           "SET Votos = " + str(candidate.votes) + " "\
+                           "WHERE CPF = " + str(candidate.cpf) + ";"
+
+        self.__cursor.execute(queryUpdateVotes)
+        self.__db.commit()
+        self.__db.close()
+        print("update")
     #
     # def setFlagVotesVoter(self, voters):
 
+c = Candidate("iLunner", 5, 0, Region("a", "b", "c"), "url", 1, "Prefeito", "sd")
+x = 0
+while x < 56:
+    c.increaseVotes()
+    x += 1
 
-
-d = DataAccess()
-d.getUevList()
+DataAccess().setVotesPerCandidate(c)

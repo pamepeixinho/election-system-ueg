@@ -25,7 +25,11 @@ class Candidate(Voter):
     qntVotesPerRegion = -1
 
     def __init__(self, name, cpf, voted_flag, region, photo_url, number, role, nickname):
-        super.__init__(self, name, cpf, voted_flag, region, photo_url)
+        super(Candidate, self).__init__(name, cpf, voted_flag, region, photo_url)
         self.__number = number
         self.__role = role
         self.__nickname = nickname
+        self.votes = 0
+
+    def increaseVotes(self):
+        self.votes += 1
