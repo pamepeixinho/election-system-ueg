@@ -1,6 +1,3 @@
-#from numpy.distutils.fcompiler import none
-
-
 class Voter(object):
     """
     ======
@@ -14,12 +11,15 @@ class Voter(object):
             regionType: Enum :py:obj: ~UegProject.Model.Types.RegionType`
     """
 
-    def __init__(self, name, cpf, voted_flag, region, photo_url=""):
-        self.__name = name
+    def __init__(self, name, cpf, voted_flag, region, photo_url=None):
+        self.name = name
         self.cpf = cpf
-        self.__photoUrl = photo_url
-        self.__votedFlag = voted_flag
-        self.__regionType = region
+        self.photoUrl = photo_url
+        self.votedFlag = voted_flag
+        self.region = region
 
-    def setVotedFlag(self):
-        self.__votedFlag = 1
+    # TODO add in Diagram
+    def toJSON(self):
+        return {'name': self.name,
+                'cpf': self.cpf,
+                'photoURL': self.photoUrl}

@@ -1,6 +1,4 @@
-
-from Voter import Voter
-
+from UegProject.Model.Voter import Voter
 
 class Candidate(Voter):
     """
@@ -22,14 +20,20 @@ class Candidate(Voter):
             regionType: Enum :py:obj: ~UegProject.Model.Types.RegionType`
     """
 
-    qntVotesPerRegion = -1
+    def increaseVotes(self):
+        self.votes += 1
+
+    qntVotesPerRegion = None
 
     def __init__(self, name, cpf, voted_flag, region, photo_url, number, role, nickname):
         super(Candidate, self).__init__(name, cpf, voted_flag, region, photo_url)
-        self.__number = number
-        self.__role = role
-        self.__nickname = nickname
-        self.votes = 0
+        self.number = number
+        self.role = role
+        self.nickname = nickname
 
-    def increaseVotes(self):
-        self.votes += 1
+    def toJSON(self):
+        return {'name': self.name,
+                'number': self.number,
+                'role': self.role,
+                'nickname': self.nickname,
+                'photoURL': self.photoUrl}

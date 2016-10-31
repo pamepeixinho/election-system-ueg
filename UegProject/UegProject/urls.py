@@ -16,16 +16,13 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from UegProject import Comunicacao
+from UegProject import Communication
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', Comunicacao.teste, name='teste'),
-    url(r'^teste/', Comunicacao.teste1, name='teste1'),
-    url(r'^teste2/', Comunicacao.teste2, name='teste2'),
-
-    url(r'^teste3/(?P<uev_id>\d+)/$', Comunicacao.teste3, name='teste3'),
-
-    # use this URL to test http://127.0.0.1:8181/teste4/?query=uev&uev_id=12
-    url(r'^teste4/$', Comunicacao.teste4, name='teste4'),
+    url(r'^$', Communication.Communication.home, name='home'),
+    url(r'^load/$', Communication.Communication().sendData, name='load'),
+    url(r'^results/$', Communication.Communication().recieveData, name='results'),
+    url(r'^candidate/(?P<candidate_name>\w*)/photo$', Communication.Communication().candidatePhoto, name='photo'),
+    url(r'^voters/(?P<voter_name>\w*)/photo$', Communication.Communication().voterPhoto, name='photo'),
 ]
