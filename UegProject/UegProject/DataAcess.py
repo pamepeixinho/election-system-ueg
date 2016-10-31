@@ -92,14 +92,17 @@ class DataAccess:
         self.__cursor.execute(queryUpdateVotes)
         self.__db.commit()
         self.__db.close()
-        print("update")
-    #
-    # def setFlagVotesVoter(self, voters):
 
-c = Candidate("iLunner", 5, 0, Region("a", "b", "c"), "url", 1, "Prefeito", "sd")
-x = 0
-while x < 56:
-    c.increaseVotes()
-    x += 1
+    def setFlagVotesVoter(self, voters):
+        self._connect_database()
 
-DataAccess().setVotesPerCandidate(c)
+        for voter in voters:
+            if voter.votedFlag == 1:
+                print("entrou")
+                queryUpdateVotedFlag = "UPDATE tb_eleitor " \
+                                       "SET Votou = " + str(voter.votedFlag) + " " \
+                                       "WHERE CPF = " + str(voter.cpf) + ";"
+                self.__cursor.execute(queryUpdateVotedFlag)
+
+        self.__db.commit()
+        self.__db.close()
