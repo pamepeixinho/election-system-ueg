@@ -23,4 +23,6 @@ urlpatterns = [
     url(r'^$', Communication.Communication.home, name='home'),
     url(r'^load/$', Communication.Communication().sendData, name='load'),
     url(r'^results/$', Communication.Communication().recieveData, name='results'),
+    url(r'^candidate/(?P<candidate_name>\w*)/photo$', Communication.Communication().candidatePhoto, name='photo'),
+    url(r'^voters/(?P<voter_name>\w*)/photo$', Communication.Communication().voterPhoto, name='photo'),
 ]

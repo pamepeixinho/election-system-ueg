@@ -1,4 +1,6 @@
 import json
+from Tkinter import Image
+
 from django.http import HttpResponse
 from django.http import HttpResponseForbidden
 from django.http import JsonResponse
@@ -86,6 +88,31 @@ class Communication(object):
         else:
             return ErrorCodes.INVALID_UEV
 
+    def candidatePhoto(self, request, candidate_name):
+        print candidate_name
+        image_path = None
+        if candidate_name == "vader":
+            image_path = "DarthVader2016"
+        elif candidate_name == "peixinho":
+            image_path = "dory2016"
+
+        return self._get_image_response("CandidatesImages", image_path)
+
+    def voterPhoto(self, request, voter_name):
+        image_path = None
+        if voter_name == "yoda":
+            image_path = "yoda"
+
+        return self._get_image_response("VotersImages", image_path)
+
+    @staticmethod
+    def _get_image_response(folder_path, image_path):
+        try:
+            with open("UegProject/{0}/{1}.jpg".format(folder_path, image_path), "rb") as f:
+                return HttpResponse(f.read(), content_type="image/jpeg")
+        except IOError:
+            return HttpResponse("null")
+
     @staticmethod
     def __testingWithVotersArray():
         r = Region("Sao Paulo", "Sao Paulo", "Brasil")
@@ -100,8 +127,10 @@ class Communication(object):
     def __testingWithCandidatesArray():
         r = Region("Sao Paulo", "Sao Paulo", "Brasil")
         r2 = Region("Sao Bernardo do Campo", "Sao Paulo", "Brasil")
-        vt2 = [Candidate("Pamela", 123, False, r, "url", 102, RoleType.DEPUTADO, "peixinho"),
+        vt2 = [Candidate("Darth Vader", 123, False, r, "0.0.0.0:8181/candidate/vader/photo", 102,
+                         RoleType.DEPUTADO, "vaderzin"),
                Candidate("Andre", 124, False, r, "url", 103, RoleType.PREFEITO, "dede"),
                Candidate("Ahmad", 125, False, r2, "url", 104, RoleType.PREFEITO, "mud"),
-               Candidate("Marco", 126, False, r, "url", 105, RoleType.GOVERNADOR, "maco")]
+               Candidate("Pamela", 126, False, r, "0.0.0.0:8181/candidate/peixinho/photo", 105,
+                         RoleType.GOVERNADOR, "peixinho")]
         return vt2
