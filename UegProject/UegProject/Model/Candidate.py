@@ -1,6 +1,5 @@
 from UegProject.Model.Voter import Voter
 
-
 class Candidate(Voter):
     """
     ======
@@ -20,6 +19,9 @@ class Candidate(Voter):
             votedFlag: if voter has vote in last election
             regionType: Enum :py:obj: ~UegProject.Model.Types.RegionType`
     """
+
+    def increaseVotes(self):
+        self.votes += 1
 
     qntVotesPerRegion = None
 

@@ -1,4 +1,3 @@
-
 class Region(object):
     """
     ======
@@ -11,6 +10,6 @@ class Region(object):
     """
 
     def __init__(self, city, state, country):
-        self.__city = city
-        self.__state = state
-        self.__country = country
+        self.city = city
+        self.state = state
+        self.country = country
