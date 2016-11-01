@@ -38,6 +38,12 @@ class Communication(object):
 
         return JsonResponse(uev_json, safe=False)
 
+    def ascertainment(self, request):
+    # call ueg.ascertainment that return string path
+    # response file pdf by path
+        return 1
+
+
     @csrf_exempt
     def recieveData(self, request):
         """

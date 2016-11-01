@@ -22,30 +22,52 @@ class Ueg(object):
     allElections = None
     # TODO elections variables---
     endElectionToday = None
-    nullVotes = None
-    whiteVotes = None
     currentUev = None
 
     # TODO create constructor -> get all data from DataAccess
     def __init__(self):
         # self.uevs = getList from DataAccess
         # self.allElections = getList from DataAccess
+        self.testingUegConstr()
+
+    def testingUegConstr(self):
         self.uevs = [
             Uev("pamela", "1234", Region("regiao1", "sao paulo", "Brasil"), "voters", "candidates", 1),
             Uev("admin", "admin", Region("regiao2", "sao paulo", "Brasil"), "voters", "candidates", 1)
         ]
+        self.uevs[0].null_votes = 10
+        self.uevs[1].null_votes = 20
+        self.uevs[0].white_votes = 20
+        self.uevs[1].white_votes = 10
         self.allElections = Elections.testingElectionsModel()
 
     def Ascertainment(self):
         # Reports.report_total_votes(self.getAllCandidates())
         candidates = Ueg.testingWithCandidatesArray()
         self.testingVotes(candidates)
-        Reports.report_total_votes(candidates)
+        null_votes, white_votes = self.getAllNullWhiteVotes()
+        Reports.report_total_votes(candidates, null_votes, white_votes)
+        Reports.report_uev_votes(candidates)
+        Reports.close_pdf()
+
         return 1
+
+    def getAllNullWhiteVotes(self):
+        null_votes = 0
+        white_votes = 0
+
+        for uev in self.uevs:
+            null_votes += uev.null_votes
+            white_votes += uev.white_votes
+
+        return null_votes, white_votes
 
     def testingVotes(self, candidates):
         for c in (0, 1, 2, 3):
-            candidates[c].setVotesPerRegion("regiao_a", c+10)
+            candidates[c].setVotesPerRegion("Sao Paulo", c+10)
+            candidates[c].setVotesPerRegion("Sao Bernardo do Campo", c + 6)
+            if c == 0:
+                candidates[c].setVotesPerRegion("Sao Joao", 20)
 
     # TODO hash login passowrd MD5
     def isValidUev(self, username, password):
@@ -99,7 +121,9 @@ class Ueg(object):
                Candidate("Andre", 124, False, r, "url", 103, RoleType.PREFEITO, "dede"),
                Candidate("Ahmad", 125, False, r2, "url", 104, RoleType.PREFEITO, "mud"),
                Candidate("Pamela", 126, False, r, "0.0.0.0:8181/candidate/peixinho/photo", 105,
-                         RoleType.GOVERNADOR, "peixinho")]
+                         RoleType.GOVERNADOR, "peixinho")
+               ]
         return vt2
+
 ueg = Ueg()
 ueg.Ascertainment()
