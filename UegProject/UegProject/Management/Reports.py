@@ -8,11 +8,16 @@ from matplotlib.gridspec import GridSpec
 
 
 class Reports(object):
-    pdf = matplotlib.backends.backend_pdf.PdfPages("output.pdf")
+    pdf = None
     colors = ['lightskyblue', '#624ea7', '#FF1493', 'gold', '#FF4500', 'yellowgreen', 'lightcoral']
 
     width = 20
     height = 18
+
+    @classmethod
+    def initPdf(cls):
+        cls.pdf = None
+        cls.pdf = matplotlib.backends.backend_pdf.PdfPages("output.pdf")
 
     @classmethod
     def report_total_votes(cls, candidates, null_votes, white_votes):
@@ -113,3 +118,4 @@ class Reports(object):
     @classmethod
     def close_pdf(cls):
         cls.pdf.close()
+        return "output.pdf"

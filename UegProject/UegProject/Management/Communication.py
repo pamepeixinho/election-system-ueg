@@ -39,9 +39,14 @@ class Communication(object):
         return JsonResponse(uev_json, safe=False)
 
     def ascertainment(self, request):
-    # call ueg.ascertainment that return string path
     # response file pdf by path
-        return 1
+        self.__verifyIfNew()
+        self.ueg.testingVotes(self.ueg.getAllCandidates())
+        filename = self.ueg.ascertainment()
+
+        # response = HttpResponse(content_type='application/pdf')
+        # response['Content-Disposition'] = 'attachment; filename=' + filename
+        return HttpResponse(filename)
 
 
     @csrf_exempt

@@ -2,7 +2,7 @@ import hashlib
 
 import numpy as np
 
-from UegProject.Management.Reports import Reports
+from Reports import Reports
 from UegProject.Model.Election.Candidate import Candidate
 from UegProject.Model.Election.Elections import Elections
 from UegProject.Model.Election.Region import Region
@@ -55,23 +55,21 @@ class Ueg(object):
         # candidate.setVotesPerRegion(self.currentUev.region.city, 100)
         return
 
-    def Ascertainment(self):
+    def ascertainment(self):
         # Reports.report_total_votes(self.getAllCandidates())
         # Reports.report_no_show_voter(self.getAllVoters())
-        # candidates = Ueg.testingWithCandidatesArray()
-        # voters = Ueg.testingWithVotersArray()
         candidates = self.getAllCandidates()
         voters = self.getAllVoters()
 
         # just for testing
-        self.testingVotes(candidates)
-
+        # self.testingVotes(candidates)
+        Reports.initPdf()
         null_votes, white_votes = self.getAllNullWhiteVotes()
         Reports.report_total_votes(candidates, null_votes, white_votes)
         Reports.report_uev_votes(candidates, self.uevs, null_votes, white_votes)
         Reports.report_no_show_voter(voters)
 
-        Reports.close_pdf()
+        return Reports.close_pdf()
 
     def getVotersPerUev(self):
         return self.currentUev.getVoters()
@@ -147,6 +145,3 @@ class Ueg(object):
                Voter("Ahmad", 125, False, r2),
                Voter("Marco", 126, False, r)]
         return vt1
-
-ueg = Ueg()
-ueg.Ascertainment()
