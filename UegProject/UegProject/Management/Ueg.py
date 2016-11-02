@@ -1,5 +1,7 @@
 import hashlib
 
+import numpy as np
+
 from UegProject.Management.Reports import Reports
 from UegProject.Model.Election.Candidate import Candidate
 from UegProject.Model.Election.Elections import Elections
@@ -56,8 +58,10 @@ class Ueg(object):
     def Ascertainment(self):
         # Reports.report_total_votes(self.getAllCandidates())
         # Reports.report_no_show_voter(self.getAllVoters())
-        candidates = Ueg.testingWithCandidatesArray()
-        voters = Ueg.testingWithVotersArray()
+        # candidates = Ueg.testingWithCandidatesArray()
+        # voters = Ueg.testingWithVotersArray()
+        candidates = self.getAllCandidates()
+        voters = self.getAllVoters()
 
         # just for testing
         self.testingVotes(candidates)
@@ -78,13 +82,13 @@ class Ueg(object):
     def getAllCandidates(self):
         candidates = []
         for uev in self.uevs:
-            candidates.append(uev.getCandidates())
+            candidates += uev.getCandidates()
         return candidates
 
     def getAllVoters(self):
         voters = []
         for uev in self.uevs:
-            voters.append(uev.getVoters())
+            voters += uev.getVoters()
         return voters
 
     def getAllUevs(self):
@@ -101,7 +105,7 @@ class Ueg(object):
         return null_votes, white_votes
 
     def testingVotes(self, candidates):
-        for c in (0, 1, 2, 3):
+        for c in np.arange(len(candidates)):
             candidates[c].setVotesPerRegion("Sao Paulo", c+10)
             candidates[c].setVotesPerRegion("Sao Bernardo do Campo", c + 6)
             if c == 0:

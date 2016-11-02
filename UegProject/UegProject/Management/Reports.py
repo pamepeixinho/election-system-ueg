@@ -41,7 +41,7 @@ class Reports(object):
 
     @classmethod
     def report_uev_votes(cls, candidates, uevs, total_null_votes, total_white_votes):
-        fig2 = plt.figure(figsize=(cls.width, cls.height))
+        fig2 = plt.figure(figsize=(cls.width, 4.5 * len(candidates)))
         grid = GridSpec(len(candidates), 2)
 
         cls._get_candidate_pies(candidates, grid)
@@ -95,7 +95,7 @@ class Reports(object):
         fig3 = plt.figure(figsize=(cls.width, cls.height+5))
         fig3.suptitle('Eleitores Ausentes', fontsize=20, fontweight='bold')
         t = .9
-        
+
         fig3.text(.2, t, "Nome - CPF", fontsize=18, style='italic')
         t -= 0.016
 
