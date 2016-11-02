@@ -50,8 +50,8 @@ class Reports(object):
         grid = GridSpec(len(candidates), 2)
 
         cls._get_candidate_pies(candidates, grid)
-        cls._get_null_pie(uevs, total_null_votes, grid)
-        cls._get_white_pie(uevs, total_white_votes, grid)
+        # cls._get_null_pie(uevs, total_null_votes, grid)
+        # cls._get_white_pie(uevs, total_white_votes, grid)
 
         fig2.suptitle(u'Votos x Região - Uev', fontsize=20, fontweight='bold')
         cls.pdf.savefig(fig2)

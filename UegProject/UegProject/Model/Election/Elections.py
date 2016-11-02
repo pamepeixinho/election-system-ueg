@@ -60,7 +60,7 @@ class Elections(object):
         Just for testing
         """
         d0 = ElectionDate(2016, 10, 29, 19, 10, 20, 0)
-        d1 = ElectionDate(2016, 10, 30, 22, 20, 15, 0)
+        d1 = ElectionDate(2016, 10, 31, 19, 30, 19, 0)
         d2 = ElectionDate(2016, 10, 28, 8, 0, 18, 0)
         d3 = ElectionDate(2016, 10, 29, 8, 0, 18, 0)
 

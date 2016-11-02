@@ -111,11 +111,14 @@ class Ueg(object):
 
     def testingUegConstr(self):
         self.uevs = [
-            Uev("pamela", "1234", Region("Sao Paulo", "sao paulo", "Brasil"), self.testingWithVotersArray(),
-                self.testingWithCandidatesArray(), 1),
-            Uev("admin", "admin", Region("Sao Bernardo do Campo", "sao paulo", "Brasil"), self.testingWithVotersArray(),
-                self.testingWithCandidatesArray(), 1)
+            Uev("pamela", "1234", Region("Sao Paulo", "sao paulo", "Brasil"), self.testingWithVotersArray(), 1),
+            Uev("admin", "admin", Region("Sao Bernardo do Campo", "sao paulo", "Brasil"),
+                self.testingWithVotersArray(),1)
         ]
+        for c in self.testingWithCandidatesArray():
+            self.uevs[0].addCandidate(c)
+            self.uevs[1].addCandidate(c)
+            
         self.uevs[0].null_votes = 10
         self.uevs[1].null_votes = 20
         self.uevs[0].white_votes = 20

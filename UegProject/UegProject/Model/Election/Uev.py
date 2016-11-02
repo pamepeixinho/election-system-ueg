@@ -18,12 +18,12 @@ class Uev(object):
     null_votes = 0
     white_votes = 0
 
-    def __init__(self, username, password, region, voters, candidates, active):
+    def __init__(self, username, password, region, voters, active):
         self.username = username
         self.password = password
         self.region = region
         self.__voters = voters
-        self.__candidates = candidates
+        self.__candidates = []
         self.__active = active
 
     def getVoters(self):
@@ -34,3 +34,6 @@ class Uev(object):
 
     def isActive(self):
         return self.__active
+
+    def addCandidate(self, candidate):
+        self.__candidates.append(candidate)
