@@ -39,7 +39,7 @@ class DataAccess:
                     "INNER JOIN tb_estado AS E ON C.Estado_id = E.Estado_id " \
                     "INNER JOIN tb_pais AS P ON E.Pais_id = P.Pais_id;"
 
-        queryCandidates = "SELECT EL.Nome, CA.CPF, EL.Votou, C.Cidade, E.Estado, P.Pais, EL.URL, CA.numero, CAR.Cargo "\
+        queryCandidates = "SELECT EL.Nome, CA.CPF, EL.Votou, C.Cidade, E.Estado, P.Pais, EL.URL, CA.numero, CAR.Cargo, CA.Apelido "\
                           "FROM tb_candidato AS CA "\
                           "INNER JOIN tb_eleitor AS EL ON CA.CPF = EL.CPF " \
                           "LEFT JOIN tb_cidade AS C ON CA.Cidade_id = C.Cidade_id " \
@@ -69,15 +69,15 @@ class DataAccess:
             for candidate in self.__candidateListDB:
                 if candidate[8] == "Presidente":
                     uev.addCandidate(Candidate(candidate[0], candidate[1], candidate[2], Region(candidate[3],
-                    candidate[4], candidate[5]), candidate[6], candidate[7], candidate[8], candidate[0]))
+                    candidate[4], candidate[5]), candidate[6], candidate[7], candidate[8], candidate[9]))
                 elif candidate[8] == "Deputado" or candidate[8] == "Governador":
                     if candidate[4] == uev.region.state:
                         uev.addCandidate(Candidate(candidate[0], candidate[1], candidate[2], Region(candidate[3],
-                        candidate[4], candidate[5]), candidate[6], candidate[7], candidate[8], candidate[0]))
+                        candidate[4], candidate[5]), candidate[6], candidate[7], candidate[8], candidate[9]))
                 else:
                     if candidate[3] == uev.region.city:
                         uev.addCandidate(Candidate(candidate[0], candidate[1], candidate[2], Region(candidate[3],
-                        candidate[4], candidate[5]), candidate[6], candidate[7], candidate[8], candidate[0]))
+                        candidate[4], candidate[5]), candidate[6], candidate[7], candidate[8], candidate[9]))
 
         self.__db.close()
         return self.__uevList
