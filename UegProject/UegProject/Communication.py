@@ -1,5 +1,4 @@
 import json
-from Tkinter import Image
 
 from django.http import HttpResponse
 from django.http import HttpResponseForbidden
@@ -7,12 +6,12 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from UegProject.ErrorCodes import ErrorCodes
-from UegProject.Model.Candidate import Candidate
-from UegProject.Model.Region import Region
-from UegProject.Model.Types.RoleType import RoleType
-from UegProject.Model.Ueg import Ueg
-from UegProject.Model.Voter import Voter
+from UegProject.Management.Ueg import Ueg
+from UegProject.Model.Election.Candidate import Candidate
+from UegProject.Model.Election.Region import Region
+from UegProject.Model.Election.Voter import Voter
 from UegProject.Model.Types.CommunicationType import CommunicationType as CT
+from UegProject.Model.Types.RoleType import RoleType
 
 
 class Communication(object):
@@ -39,10 +38,30 @@ class Communication(object):
 
         return JsonResponse(uev_json, safe=False)
 
+    def ascertainment(self, request):
+        self.__verifyIfNew()
+        self.ueg.testingVotes(self.ueg.getAllCandidates())
+        filename = self.ueg.ascertainment()
+
+        # open the file
+        with open(filename, "rb") as fid:
+            filedata = fid.read()
+
+        #  use this to download pdf
+        # response = HttpResponse(filedata, content_type="text/plain")
+
+        #  use this to show pdf (can download too)
+        response = HttpResponse(filedata, content_type="application/pdf")
+
+        return response
+
+
     @csrf_exempt
     def recieveData(self, request):
         """
-        curl -H "Content-Type: application/json" -X POST -d '{"username":"pamela","password":"81dc9bdb52d04dc20036dbd8313ed055", "voters":"v", "candidates":"c", "nullVotes":"null", "whiteVotes":"null"}' 127.0.0.1:8181/results/
+        curl -H "Content-Type: application/json" -X POST -d '{"username":"pamela",
+        "password":"81dc9bdb52d04dc20036dbd8313ed055", "voters":"v", "candidates":"c",
+        "nullVotes":"null", "whiteVotes":"null"}' 127.0.0.1:8181/results/
         """
         if request.method != 'POST':
             return HttpResponse(ErrorCodes.WRONG_REQUEST)
@@ -69,7 +88,7 @@ class Communication(object):
             # TODO ----------------------------
 
             "voters": [v.toJSON() for v in self.__testingWithVotersArray()],
-            "candidates": [c.toJSON() for c in self.__testingWithCandidatesArray()],
+            "candidates": [c.toJSON() for c in self.testingWithCandidatesArray()],
         }
         return uev_json
 
@@ -124,7 +143,7 @@ class Communication(object):
         return vt1
 
     @staticmethod
-    def __testingWithCandidatesArray():
+    def testingWithCandidatesArray():
         r = Region("Sao Paulo", "Sao Paulo", "Brasil")
         r2 = Region("Sao Bernardo do Campo", "Sao Paulo", "Brasil")
         vt2 = [Candidate("Darth Vader", 123, False, r, "0.0.0.0:8181/candidate/vader/photo", 102,

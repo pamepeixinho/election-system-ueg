@@ -54,9 +54,11 @@ class Elections(object):
         return False, None
 
 
-    # Just for testing
     @staticmethod
     def testingElectionsModel():
+        """
+        Just for testing
+        """
         d0 = ElectionDate(2016, 10, 29, 19, 10, 20, 0)
         d1 = ElectionDate(2016, 10, 31, 19, 30, 19, 0)
         d2 = ElectionDate(2016, 10, 28, 8, 0, 18, 0)
@@ -65,7 +67,6 @@ class Elections(object):
         list = [d0, d1, d2, d3]
 
         elections = Elections(list)
-        print elections.validElectionByCommunicationType(CT.CARREGAMENTO)
         return elections
 
 

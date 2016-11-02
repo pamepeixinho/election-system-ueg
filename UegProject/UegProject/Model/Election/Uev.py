@@ -10,7 +10,13 @@ class Uev(object):
             voters
             candidates
             active: boolean -> tells if uev is active
+            -
+            null_votes: null votes in this UEV
+            white_votes: null votes in this UEV
     """
+
+    null_votes = 0
+    white_votes = 0
 
     def __init__(self, username, password, region, voters, active):
         self.username = username
