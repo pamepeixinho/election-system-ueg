@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from UegProject.Management import Communication
+from UegProject import Communication
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

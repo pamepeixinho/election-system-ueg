@@ -43,10 +43,10 @@ class Communication(object):
         self.__verifyIfNew()
         self.ueg.testingVotes(self.ueg.getAllCandidates())
         filename = self.ueg.ascertainment()
-
-        # response = HttpResponse(content_type='application/pdf')
-        # response['Content-Disposition'] = 'attachment; filename=' + filename
-        return HttpResponse(filename)
+        # TODO fix response
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename=' + filename
+        return response
 
 
     @csrf_exempt
