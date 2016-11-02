@@ -1,4 +1,5 @@
 import json
+from subprocess import Popen
 
 from django.http import HttpResponse
 from django.http import HttpResponseForbidden
@@ -39,13 +40,23 @@ class Communication(object):
         return JsonResponse(uev_json, safe=False)
 
     def ascertainment(self, request):
-    # response file pdf by path
         self.__verifyIfNew()
         self.ueg.testingVotes(self.ueg.getAllCandidates())
         filename = self.ueg.ascertainment()
-        # TODO fix response
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename=' + filename
+
+        # open the file
+        with open(filename, "rb") as fid:
+            filedata = fid.read()
+
+        # remove the file
+        p = Popen("rm %s" % filename, shell=True)
+
+        #  use this to download pdf
+        # response = HttpResponse(filedata, content_type="text/plain")
+
+        #  use this to show pdf (can download too)
+        response = HttpResponse(filedata, content_type="application/pdf")
+
         return response
 
 
