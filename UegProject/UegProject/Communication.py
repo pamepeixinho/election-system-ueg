@@ -1,5 +1,4 @@
 import json
-from subprocess import Popen
 
 from django.http import HttpResponse
 from django.http import HttpResponseForbidden
@@ -48,9 +47,6 @@ class Communication(object):
         with open(filename, "rb") as fid:
             filedata = fid.read()
 
-        # remove the file
-        p = Popen("rm %s" % filename, shell=True)
-
         #  use this to download pdf
         # response = HttpResponse(filedata, content_type="text/plain")
 
@@ -63,7 +59,9 @@ class Communication(object):
     @csrf_exempt
     def recieveData(self, request):
         """
-        curl -H "Content-Type: application/json" -X POST -d '{"username":"pamela","password":"81dc9bdb52d04dc20036dbd8313ed055", "voters":"v", "candidates":"c", "nullVotes":"null", "whiteVotes":"null"}' 127.0.0.1:8181/results/
+        curl -H "Content-Type: application/json" -X POST -d '{"username":"pamela",
+        "password":"81dc9bdb52d04dc20036dbd8313ed055", "voters":"v", "candidates":"c",
+        "nullVotes":"null", "whiteVotes":"null"}' 127.0.0.1:8181/results/
         """
         if request.method != 'POST':
             return HttpResponse(ErrorCodes.WRONG_REQUEST)

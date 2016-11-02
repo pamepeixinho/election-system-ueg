@@ -35,7 +35,7 @@ class Reports(object):
         fig1 = plt.figure(figsize=(cls.width, cls.height))
 
         random.shuffle(cls.colors)
-        plt.bar(x_ind, y_votes, align='center', alpha=0.7, color=cls.colors)
+        plt.bar(x_ind, y_votes, align='center', alpha=1, color=cls.colors)
         plt.xticks(x_ind, names)
         plt.subplots_adjust(bottom=0.1)
         plt.title("Total Votos", fontsize=20, fontweight='bold')
