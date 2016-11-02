@@ -98,11 +98,22 @@ class DataAccess:
 
         for voter in voters:
             if voter.votedFlag == 1:
-                print("entrou")
                 queryUpdateVotedFlag = "UPDATE tb_eleitor " \
                                        "SET Votou = " + str(voter.votedFlag) + " " \
                                        "WHERE CPF = " + str(voter.cpf) + ";"
                 self.__cursor.execute(queryUpdateVotedFlag)
+
+        self.__db.commit()
+        self.__db.close()
+
+    def updateActiveFlagUev(self, uevs):
+        self._connect_database()
+
+        for uev in uevs:
+            queryUpdateActiveFlag = "UPDATE tb_uev " \
+                                    "SET Ativo = " + str(uev.isActive()) + " " \
+                                    "WHERE Usuario = " + str(uev.username) + ";"
+            self.__cursor.execute(queryUpdateActiveFlag)
 
         self.__db.commit()
         self.__db.close()
