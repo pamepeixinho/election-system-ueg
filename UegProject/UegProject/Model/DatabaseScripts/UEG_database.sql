@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS UEG;
 CREATE DATABASE UEG;
 
 USE UEG;
@@ -38,18 +39,6 @@ PRIMARY KEY(Cidade_id),
 FOREIGN KEY(Estado_id) REFERENCES tb_Estado(Estado_id)
 );
 
-insert into tb_Pais(Pais) values('Brasil');
-
-insert into tb_Estado(Estado, Pais_id) values('Sao Paulo', 1);
-insert into tb_Estado(Estado, Pais_id) values('Rio de Janeiro', 1);
-
-
-insert into tb_Cidade(Cidade, Estado_id) values('Sao Paulo', 1);
-insert into tb_Cidade(Cidade, Estado_id) values('Sao Bernardo do Campo', 1);
-insert into tb_Cidade(Cidade, Estado_id) values('Rio de Janeiro', 2);
-
-
-
 CREATE TABLE tb_Eleitor
 (
 CPF int,
@@ -80,11 +69,6 @@ FOREIGN KEY(Estado_id) REFERENCES tb_Estado(Estado_id),
 FOREIGN KEY(Cidade_id) REFERENCES tb_Cidade(Cidade_id)
 );
 
-insert into tb_candidato(CPF, Numero, Cargo_id, Cidade_id, Estado_id, Pais_id, Votos) values(3, 33, 1, 2, 1, 1, 0);
-insert into tb_candidato(CPF, Numero, Cargo_id, Cidade_id, Estado_id, Pais_id, Votos) values(4, 3333, 2, 2, 1, 1, 0);
-insert into tb_candidato(CPF, Numero, Cargo_id, Pais_id, Votos) values(5, 11, 4, 1, 0);
-insert into tb_candidato(CPF, Numero, Cargo_id, Cidade_id, Estado_id, Pais_id, Votos) values(2, 111, 3, 2, 1, 1, 0);
-insert into tb_candidato(CPF, Numero, Cargo_id, Cidade_id, Estado_id, Pais_id, Votos) values(1, 3333, 6, 2, 2, 1, 0);
 CREATE TABLE tb_UEV
 (
 Usuario varchar(50),
@@ -95,6 +79,6 @@ PRIMARY KEY(Usuario),
 foreign key (Cidade_id) REFERENCES tb_Cidade(Cidade_id)
 );
 
-insert into tb_uev (usuario, senha, cidade_id, Ativo) values ('user1', 'senha1', 2, false);
-insert into tb_uev (usuario, senha, cidade_id, Ativo) values ('user2', 'senha2', 3, false);
+commit;
+
 
