@@ -50,10 +50,10 @@ class Reports(object):
         grid = GridSpec(len(candidates), 2)
 
         cls._get_candidate_pies(candidates, grid)
-        # cls._get_null_pie(uevs, total_null_votes, grid)
-        # cls._get_white_pie(uevs, total_white_votes, grid)
+        cls._get_null_pie(uevs, total_null_votes, grid)
+        cls._get_white_pie(uevs, total_white_votes, grid)
 
-        fig2.suptitle(u'Votos x Região - Uev', fontsize=20, fontweight='bold')
+        fig2.suptitle('Votos x Uev', fontsize=20, fontweight='bold')
         cls.pdf.savefig(fig2)
 
         plt.close()
@@ -62,26 +62,41 @@ class Reports(object):
     @classmethod
     def _get_candidate_pies(cls, candidates, grid):
         for i, candidate in enumerate(candidates):
+            if candidate.getTotalVotes == 0:
+                pass
+
             total_votes = candidate.getTotalVotes()
 
-            regions = candidate.qntVotesPerRegion.keys()
+            regions = candidate.qntVotesPerUev.keys()
 
-            percentages_regions = [(value * 1.0 / total_votes) * 100
-                                   for key, value in candidate.qntVotesPerRegion.iteritems()]
+            percentages_regions = [value
+                                   for key, value in candidate.qntVotesPerUev.iteritems()]
 
             cls.extract_pie_subplot('Candidato: ' + candidate.name, i, 0, percentages_regions, regions, grid)
 
     @classmethod
     def _get_null_pie(cls, uevs, total_votes, grid):
-        regions = [uev.region.city for uev in uevs]
-        percentages_regions = [(uev.null_votes * 1.0 / total_votes) * 100 for uev in uevs]
+        if total_votes == 0:
+            return
+        regions = [uev.username for uev in uevs]
+        percentages_regions = [uev.null_votes for uev in uevs]
         cls.extract_pie_subplot("Votos Nulos", 1, 1, percentages_regions, regions, grid)
 
     @classmethod
     def _get_white_pie(cls, uevs, total_votes, grid):
-        regions = [uev.region.city for uev in uevs]
-        percentages_regions = [(uev.white_votes * 1.0 / total_votes) * 100 for uev in uevs]
+        if total_votes == 0:
+            return
+        regions = [uev.username for uev in uevs]
+        percentages_regions = [uev.white_votes for uev in uevs]
         cls.extract_pie_subplot("Votos em branco", 2, 1, percentages_regions, regions, grid)
+
+    values = []
+
+    @staticmethod
+    def my_autopct(pct):
+        total = sum(Reports.values)
+        val = int(pct * total / 100.0)
+        return '{p:.2f}%  ({v:d})'.format(p=pct, v=val)
 
     @classmethod
     def extract_pie_subplot(cls, title, i, j, percentages_regions, regions, grid):
@@ -89,7 +104,8 @@ class Reports(object):
         explode[0] = 0.1
         random.shuffle(cls.colors)
         plt.subplot(grid[i, j], title=title)
-        patches, texts, _ = plt.pie(percentages_regions, colors=cls.colors, autopct='%1.1f%%',
+        cls.values = percentages_regions
+        patches, texts, _ = plt.pie(percentages_regions, colors=cls.colors, autopct=cls.my_autopct,
                                     explode=explode, shadow=True, startangle=140)
         plt.legend(patches, regions, loc='center left', bbox_to_anchor=(0.75, 0.75))
         plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)

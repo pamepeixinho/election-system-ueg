@@ -23,7 +23,7 @@ class DataAccess:
     def _connect_database(cls):
         try:
             cls.db = mysql.connector.connect(user='root',
-                                             password='xxx',
+                                             password='xxxxxx',
                                              host='127.0.0.1',
                                              database='ueg')
             cls.cursor = cls.db.cursor()
@@ -97,28 +97,27 @@ class DataAccess:
                                                    candidate[6], candidate[7], candidate[8], candidate[9]))
 
         cls.db.close()
-        print 'getUevList'
         return cls.__uevList
 
     @classmethod
-    def setVotesPerCandidate(cls, candidate):
+    def setVotesPerCandidate(cls, candidates):
         cls._connect_database()
 
-        queryUpdateVotes = "UPDATE tb_candidato " \
-                           "SET Votos = " + str(candidate.votes) + " " \
-                                                                   "WHERE CPF = " + str(candidate.cpf) + ";"
+        for candidate in candidates:
+            queryUpdateVotes = "UPDATE tb_candidato " \
+                               "SET Votos = " + str(candidate.votes) + " " \
+                                                                       "WHERE CPF = " + str(candidate.cpf) + ";"
+            cls.cursor.execute(queryUpdateVotes)
 
-        cls.cursor.execute(queryUpdateVotes)
         cls.db.commit()
         cls.db.close()
-        print 'setVotesPerCandidate'
 
     @classmethod
     def setFlagVotesVoter(cls, voters):
         cls._connect_database()
 
         for voter in voters:
-            if voter.votedFlag == 1:
+            if voter.votedFlag:
                 queryUpdateVotedFlag = "UPDATE tb_eleitor " \
                                        "SET Votou = " + str(voter.votedFlag) + " " \
                                                                                "WHERE CPF = " + str(voter.cpf) + ";"
@@ -126,7 +125,6 @@ class DataAccess:
 
         cls.db.commit()
         cls.db.close()
-        print 'setFlagVotesVoter'
 
     @classmethod
     def updateActiveFlagUev(cls, uevs):
@@ -142,4 +140,4 @@ class DataAccess:
         cls.db.close()
 
 
-DataAccess.getUevList()
+# DataAccess.getUevList()

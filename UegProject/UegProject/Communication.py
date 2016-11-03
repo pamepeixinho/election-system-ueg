@@ -38,9 +38,34 @@ class Communication(object):
 
         return JsonResponse(uev_json, safe=False)
 
+    @csrf_exempt
+    def recieveData(self, request):
+        """
+        curl -H "Content-Type: application/json" -X POST -d '{"username":"pamela", "password":"81dc9bdb52d04dc20036dbd8313ed055", "voters":"v", "candidates":"c", "nullVotes":"null", "whiteVotes":"null"}' 127.0.0.1:8181/results/
+        """
+        if request.method != 'POST':
+            return HttpResponse(ErrorCodes.WRONG_REQUEST)
+
+        json_data = json.loads(request.body, parse_int=int)
+
+        self.__verifyIfNew()
+
+        authenticated = self.__authenticate(json_data["username"], json_data["password"], CT.RECEBIMENTO)
+        if authenticated is not True:
+            return HttpResponseForbidden('ERRO {0}'.format(authenticated))
+
+        print json_data["voters"][0]["voted"]
+        print json_data["whiteVotes"]
+        print json_data["nullVotes"]
+
+        self.ueg.fillVotes(json_data["voters"], json_data["candidates"],
+                           json_data["nullVotes"], json_data["whiteVotes"])
+
+        return HttpResponse('OK')
+
     def ascertainment(self, request):
         self.__verifyIfNew()
-        self.ueg.testingVotes(self.ueg.getAllCandidates())
+        # self.ueg.testingVotes(self.ueg.getAllCandidates())
         filename = self.ueg.ascertainment()
 
         # open the file
@@ -52,61 +77,9 @@ class Communication(object):
 
         #  use this to show pdf (can download too)
         response = HttpResponse(filedata, content_type="application/pdf")
-
         return response
 
-
-    @csrf_exempt
-    def recieveData(self, request):
-        """
-        curl -H "Content-Type: application/json" -X POST -d '{"username":"pamela",
-        "password":"81dc9bdb52d04dc20036dbd8313ed055", "voters":"v", "candidates":"c",
-        "nullVotes":"null", "whiteVotes":"null"}' 127.0.0.1:8181/results/
-        """
-        if request.method != 'POST':
-            return HttpResponse(ErrorCodes.WRONG_REQUEST)
-        json_data = json.loads(request.body)
-
-        self.__verifyIfNew()
-
-        authenticated = self.__authenticate(json_data["username"], json_data["password"], CT.RECEBIMENTO)
-        if authenticated is not True:
-            return HttpResponseForbidden('ERRO {0}'.format(authenticated))
-
-        self.ueg.fillVotes(json_data["voters"], json_data["candidates"],
-                           json_data["nullVotes"], json_data["whiteVotes"])
-
-        return HttpResponse('OK')
-
-    def __getUevJson(self):
-        uev_json = {
-            "electionEnd": self.ueg.endElectionToday.time(),
-
-            # TODO get array BY UEG -----------
-            # "Eleitores": [v.toJSON() for v in self.ueg.getVotersPerUev()]
-            # "Candidatos": [c.toJSON() for c in self.ueg.getCandidatesPerUev()]
-            # TODO ----------------------------
-
-            "voters": [v.toJSON() for v in self.__testingWithVotersArray()],
-            "candidates": [c.toJSON() for c in self.testingWithCandidatesArray()],
-        }
-        return uev_json
-
     # TODO verify requirement of this function and usage (Diagrams TOO)
-    def __verifyIfNew(self):
-        if self.ueg is None:
-            self.ueg = Ueg()
-
-    # TODO verify and update __authenticate usage in diagrams
-    def __authenticate(self, username, password, communicationType):
-        if self.ueg.isValidUev(username=username, password=password):
-            if self.ueg.isValidElection(communicationType):
-                return True
-            else:
-                return ErrorCodes.INVALID_TIME_ELECTION
-        else:
-            return ErrorCodes.INVALID_UEV
-
     def candidatePhoto(self, request, candidate_name):
         print candidate_name
         image_path = None
@@ -123,6 +96,29 @@ class Communication(object):
             image_path = "yoda"
 
         return self._get_image_response("VotersImages", image_path)
+
+    def __getUevJson(self):
+        uev_json = {
+            "electionEnd": self.ueg.endElectionToday.time(),
+            "voters": [v.toJSON() for v in self.ueg.getVotersPerUev()],
+            "candidates": [c.toJSON() for c in self.ueg.getCandidatesPerUev()]
+        }
+        return uev_json
+
+    def __verifyIfNew(self):
+        if self.ueg is None:
+            self.ueg = Ueg()
+
+    # TODO verify and update __authenticate usage in diagrams
+
+    def __authenticate(self, username, password, communicationType):
+        if self.ueg.isValidUev(username=username, password=password):
+            if self.ueg.isValidElection(communicationType):
+                return True
+            else:
+                return ErrorCodes.INVALID_TIME_ELECTION
+        else:
+            return ErrorCodes.INVALID_UEV
 
     @staticmethod
     def _get_image_response(folder_path, image_path):
@@ -153,3 +149,4 @@ class Communication(object):
                Candidate("Pamela", 126, False, r, "0.0.0.0:8181/candidate/peixinho/photo", 105,
                          RoleType.GOVERNADOR, "peixinho")]
         return vt2
+

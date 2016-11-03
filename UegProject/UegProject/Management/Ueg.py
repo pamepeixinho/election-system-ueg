@@ -3,6 +3,7 @@ import hashlib
 import numpy as np
 
 from Reports import Reports
+from UegProject.DataAccess import DataAccess
 from UegProject.Model.Election.Candidate import Candidate
 from UegProject.Model.Election.Elections import Elections
 from UegProject.Model.Election.Region import Region
@@ -31,9 +32,9 @@ class Ueg(object):
 
     # TODO create constructor -> get all data from DataAccess
     def __init__(self):
-        # self.uevs = getList from DataAccess
-        # self.allElections = getList from DataAccess
-        self.testingUegConstr()
+        self.uevs = DataAccess.getUevList()
+        self.allElections = Elections.testingElectionsModel()
+        # self.testingUegConstr()
 
     def isValidUev(self, username, password):
         for uev in self.uevs:
@@ -48,28 +49,67 @@ class Ueg(object):
         return valid_election
 
     def fillVotes(self, votes_voters, votes_candidates, null_votes, white_votes):
-        # dataaccess.updatecandidates
-        # dataaccess.updatevoters
-        # TODO verify
-        # for candidate in self.currentUev.getCandidates():
-        # candidate.setVotesPerRegion(self.currentUev.region.city, 100)
-        return
+
+        print votes_voters
+        print votes_candidates
+
+        self.setFlagVotesVotersLocal(votes_voters)
+        DataAccess.setFlagVotesVoter(self.getAllVoters())
+
+        self.setVotesPerCandidateLocal(votes_candidates)
+        DataAccess.setVotesPerCandidate(self.getAllCandidates())
+
+        self.setVotesUevLocal(null_votes, white_votes)
+        # TODO data access update null and white votes
+
+    def setFlagVotesVotersLocal(self, votes_voters):
+        for i, x in enumerate(votes_voters):
+            voter = self.getVoterByCPF(votes_voters[i]["cpf"])
+            voter.votedFlag = votes_voters[i]["voted"]
+
+    def getVoterByCPF(self, cpf):
+        for voter in self.getAllVoters():
+            if voter.cpf == cpf:
+                return voter
+
+    def getUevByUsername(self, username):
+        for uev in self.uevs:
+            if uev.username == username:
+                return uev
+
+    def setVotesPerCandidateLocal(self, votes_candidates):
+        for i, x in enumerate(votes_candidates):
+            candidate = self.getCandidateByNumber(votes_candidates[i]["number"])
+            votes = votes_candidates[i]["votes"]
+            candidate.votes += votes
+            candidate.setVotesPerUev(self.currentUev.username, votes)
+
+    def getCandidateByNumber(self, number):
+        for candidate in self.getAllCandidates():
+            if candidate.number == number:
+                return candidate
+
+    def setVotesUevLocal(self, null_votes, white_votes):
+        uev = self.getUevByUsername(self.currentUev.username)
+        uev.null_votes = null_votes
+        uev.white_votes = white_votes
 
     def ascertainment(self):
-        # Reports.report_total_votes(self.getAllCandidates())
-        # Reports.report_no_show_voter(self.getAllVoters())
+        global filename
         candidates = self.getAllCandidates()
         voters = self.getAllVoters()
 
         # just for testing
         # self.testingVotes(candidates)
-        Reports.initPdf()
-        null_votes, white_votes = self.getAllNullWhiteVotes()
-        Reports.report_total_votes(candidates, null_votes, white_votes)
-        Reports.report_uev_votes(candidates, self.uevs, null_votes, white_votes)
-        Reports.report_no_show_voter(voters)
+        if len(candidates) != 0 and len(voters) != 0:
+            Reports.initPdf()
+            null_votes, white_votes = self.getAllNullWhiteVotes()
+            Reports.report_total_votes(candidates, null_votes, white_votes)
+            Reports.report_uev_votes(candidates, self.uevs, null_votes, white_votes)
+            Reports.report_no_show_voter(voters)
+            filename = Reports.close_pdf()
 
-        return Reports.close_pdf()
+        return filename
 
     def getVotersPerUev(self):
         return self.currentUev.getVoters()
@@ -104,10 +144,10 @@ class Ueg(object):
 
     def testingVotes(self, candidates):
         for c in np.arange(len(candidates)):
-            candidates[c].setVotesPerRegion("Sao Paulo", c+10)
-            candidates[c].setVotesPerRegion("Sao Bernardo do Campo", c + 6)
+            candidates[c].setVotesPerUev("Sao Paulo", c + 10)
+            candidates[c].setVotesPerUev("Sao Bernardo do Campo", c + 6)
             if c == 0:
-                candidates[c].setVotesPerRegion("Sao Joao", 20)
+                candidates[c].setVotesPerUev("Sao Joao", 20)
 
     def testingUegConstr(self):
         self.uevs = [

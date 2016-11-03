@@ -19,7 +19,7 @@ regionList = [["Sao Paulo", "Sao Paulo", "Brasil"], ["Sao Bernardo do Campo", "S
 
 
 db = mysql.connector.connect(user='root',
-                              password='xxxx',
+                              password='xxxxxxxxx',
                               host='127.0.0.1',
                               database='ueg')
 cursor = db.cursor()
@@ -56,7 +56,7 @@ for name in namesList:
                    " VALUES (" + str(j+i) + " ," + name +", " + str(i%4 + 1) + ", '', false);")
     i += 1
 cursor.execute("INSERT INTO tb_eleitor(CPF, Nome, Cidade_id, URL, Votou)"
-               "VALUES (666, 'Darth Vader', 3, '', 0)")
+               "VALUES (666, 'DARTH VADER', 3, '', 0)")
 
 #insert vereadores
 i = 0
@@ -110,10 +110,10 @@ while k < 2:
 
 #insert uevs
 
-cursor.execute("INSERT INTO tb_uev(Usuario, Senha, Cidade_id, Ativo) VALUES('uevSaoPaulo', 'saopaulo1', 1, 0)")
-cursor.execute("INSERT INTO tb_uev(Usuario, Senha, Cidade_id, Ativo) VALUES('uevBeloHorizonte', 'belohorizonte1', 1, 0)")
-cursor.execute("INSERT INTO tb_uev(Usuario, Senha, Cidade_id, Ativo) VALUES('uevRioDeJaneiro', 'riodejaneiro1', 1, 0)")
-cursor.execute("INSERT INTO tb_uev(Usuario, Senha, Cidade_id, Ativo) VALUES('uevPortoAlegre', 'portoalegre1', 1, 0)")
+cursor.execute("INSERT INTO tb_uev(Usuario, Senha, Cidade_id, Ativo) VALUES('uevSaoPaulo', 'saopaulo1', 1, 1)")
+cursor.execute("INSERT INTO tb_uev(Usuario, Senha, Cidade_id, Ativo) VALUES('uevBeloHorizonte', 'belohorizonte1', 2, 1)")
+cursor.execute("INSERT INTO tb_uev(Usuario, Senha, Cidade_id, Ativo) VALUES('uevRioDeJaneiro', 'riodejaneiro1', 3, 1)")
+cursor.execute("INSERT INTO tb_uev(Usuario, Senha, Cidade_id, Ativo) VALUES('uevPortoAlegre', 'portoalegre1', 4, 1)")
 
 db.commit()
 db.close()
