@@ -18,14 +18,14 @@ from django.contrib import admin
 
 from UegProject import Communication
 
-comunication = Communication.Communication()
+communication = Communication.Communication()
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', comunication.home, name='home'),
-    url(r'^load/$', comunication.sendData, name='load'),
-    url(r'^results/$', comunication.recieveData, name='results'),
-    url(r'^candidate/(?P<candidate_name>\w*)/photo$', comunication.candidatePhoto, name='photo'),
-    url(r'^voters/(?P<voter_name>\w*)/photo$', comunication.voterPhoto, name='photo'),
-    url(r'^ascertainment/$', comunication.ascertainment, name='ascertainment'),
+    url(r'^$', communication.home, name='home'),
+    url(r'^load/$', communication.sendData, name='load'),
+    url(r'^results/$', communication.recieveData, name='results'),
+    url(r'^candidate/(?P<candidate_name>\w*)/photo$', communication.candidatePhoto, name='photo'),
+    url(r'^voters/(?P<voter_name>\w*)/photo$', communication.voterPhoto, name='photo'),
+    url(r'^ascertainment/$', communication.ascertainment, name='ascertainment'),
 ]

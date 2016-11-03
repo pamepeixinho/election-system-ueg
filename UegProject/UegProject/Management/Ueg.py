@@ -102,6 +102,7 @@ class Ueg(object):
         # just for testing
         # self.testingVotes(candidates)
         if len(candidates) != 0 and len(voters) != 0:
+            print 'Nao eh zero'
             Reports.initPdf()
             null_votes, white_votes = self.getAllNullWhiteVotes()
             Reports.report_total_votes(candidates, null_votes, white_votes)
