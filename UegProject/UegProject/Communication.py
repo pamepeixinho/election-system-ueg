@@ -1,3 +1,4 @@
+# coding=utf-8
 import json
 
 from django.http import HttpResponse
@@ -67,6 +68,9 @@ class Communication(object):
         self.__verifyIfNew()
         # self.ueg.testingVotes(self.ueg.getAllCandidates())
         filename = self.ueg.ascertainment()
+
+        if filename == u"Erro ao Carregar Apuração, recarregue esse página":
+            return HttpResponse(filename)
 
         # open the file
         with open(filename, "rb") as fid:

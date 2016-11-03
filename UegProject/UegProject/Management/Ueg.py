@@ -1,3 +1,4 @@
+# coding=utf-8
 import hashlib
 
 import numpy as np
@@ -95,7 +96,6 @@ class Ueg(object):
         uev.white_votes = white_votes
 
     def ascertainment(self):
-        global filename
         candidates = self.getAllCandidates()
         voters = self.getAllVoters()
 
@@ -103,12 +103,15 @@ class Ueg(object):
         # self.testingVotes(candidates)
         if len(candidates) != 0 and len(voters) != 0:
             print 'Nao eh zero'
-            Reports.initPdf()
+            t0 = Reports.initPdf()
             null_votes, white_votes = self.getAllNullWhiteVotes()
-            Reports.report_total_votes(candidates, null_votes, white_votes)
-            Reports.report_uev_votes(candidates, self.uevs, null_votes, white_votes)
-            Reports.report_no_show_voter(voters)
+            t1 = Reports.report_total_votes(candidates, null_votes, white_votes)
+            t2 = Reports.report_uev_votes(candidates, self.uevs, null_votes, white_votes)
+            t3 = Reports.report_no_show_voter(voters)
             filename = Reports.close_pdf()
+
+            if t0 != "OK" or t1 != "OK" or t2 != "OK" or t3 != "OK" or filename != "output.pdf":
+                return u"Erro ao Carregar Apuração, recarregue esse página"
 
         return filename
 

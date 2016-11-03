@@ -17,7 +17,11 @@ class Reports(object):
     @classmethod
     def initPdf(cls):
         cls.pdf = None
-        cls.pdf = matplotlib.backends.backend_pdf.PdfPages("output.pdf")
+        try:
+            cls.pdf = matplotlib.backends.backend_pdf.PdfPages("output.pdf")
+        except Exception, e:
+            return "Erro ao Carregar Apuração, recarregue esse página"
+        return "OK"
 
     @classmethod
     def report_total_votes(cls, candidates, null_votes, white_votes):
@@ -39,8 +43,13 @@ class Reports(object):
         plt.subplots_adjust(bottom=0.1)
         plt.title("Total Votos", fontsize=20, fontweight='bold')
 
-        cls.pdf.savefig(fig1)
+        try:
+            cls.pdf.savefig(fig1)
+        except Exception, e:
+            return "Erro ao Carregar Apuração, recarregue esse página"
+
         plt.close()
+        return "OK"
 
     @classmethod
     def report_uev_votes(cls, candidates, uevs, total_null_votes, total_white_votes):
@@ -65,9 +74,13 @@ class Reports(object):
         fig2.suptitle('Votos x Uev', fontsize=20, fontweight='bold')
 
         if flag:
-            cls.pdf.savefig(fig2)
+            try:
+                cls.pdf.savefig(fig2)
+            except Exception, e:
+                return "Erro ao Carregar Apuração, recarregue esse página"
 
         plt.close()
+        return "OK"
 
     @staticmethod
     def removeCandidateWithoutVotes(candidates):
@@ -150,10 +163,19 @@ class Reports(object):
             cell.set_height(0.004)
             cell._loc = 'left'
 
-        cls.pdf.savefig(fig3, dpi=(200))
+        try:
+            cls.pdf.savefig(fig3, dpi=(200))
+        except Exception, e:
+            return "Erro ao Carregar Apuração, recarregue esse página"
+
         plt.close()
+        return "OK"
+
 
     @classmethod
     def close_pdf(cls):
-        cls.pdf.close()
+        try:
+            cls.pdf.close()
+        except Exception, e:
+            return "Erro ao Carregar Apuração, recarregue esse página"
         return "output.pdf"
