@@ -17,8 +17,8 @@ from UegProject.Model.Types.RoleType import RoleType
 class Communication(object):
     ueg = None
 
-    @staticmethod
-    def home(request):
+    def home(self, request):
+        self.__verifyIfNew()
         return HttpResponse('UEG')
 
     def sendData(self, request):

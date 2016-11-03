@@ -29,14 +29,14 @@ class Reports(object):
         y_votes.append(null_votes)
         y_votes.append(white_votes)
 
-        names.append("Nulo")
-        names.append("Branco")
+        names.append("NULO")
+        names.append("BRANCO")
 
         fig1 = plt.figure(figsize=(cls.width, cls.height))
 
         random.shuffle(cls.colors)
         plt.bar(x_ind, y_votes, align='center', alpha=1, color=cls.colors)
-        plt.xticks(x_ind, names)
+        plt.xticks(x_ind, names, rotation='vertical')
         plt.subplots_adjust(bottom=0.1)
         plt.title("Total Votos", fontsize=20, fontweight='bold')
 
@@ -49,12 +49,12 @@ class Reports(object):
         fig2 = plt.figure(figsize=(cls.width, 4.5 * len(candidates)))
         grid = GridSpec(len(candidates), 2)
 
-        cls._get_candidate_pies(candidates, grid)
-        cls._get_null_pie(uevs, total_null_votes, grid)
-        cls._get_white_pie(uevs, total_white_votes, grid)
-
-        fig2.suptitle('Votos x Uev', fontsize=20, fontweight='bold')
-        cls.pdf.savefig(fig2)
+        if len(candidates) > 0:
+            cls._get_candidate_pies(candidates, grid)
+            cls._get_null_pie(uevs, total_null_votes, grid)
+            cls._get_white_pie(uevs, total_white_votes, grid)
+            fig2.suptitle('Votos x Uev', fontsize=20, fontweight='bold')
+            cls.pdf.savefig(fig2)
 
         plt.close()
 
@@ -62,10 +62,10 @@ class Reports(object):
     @classmethod
     def _get_candidate_pies(cls, candidates, grid):
         for i, candidate in enumerate(candidates):
-            if candidate.getTotalVotes == 0:
-                pass
-
             total_votes = candidate.getTotalVotes()
+
+            if total_votes == 0:
+                pass
 
             regions = candidate.qntVotesPerUev.keys()
 
@@ -100,6 +100,8 @@ class Reports(object):
 
     @classmethod
     def extract_pie_subplot(cls, title, i, j, percentages_regions, regions, grid):
+        if len(regions) == 0:
+            return -1
         explode = [0] * len(regions)
         explode[0] = 0.1
         random.shuffle(cls.colors)
@@ -110,23 +112,18 @@ class Reports(object):
         plt.legend(patches, regions, loc='center left', bbox_to_anchor=(0.75, 0.75))
         plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
         plt.axis("equal")
+        return 1
 
     @classmethod
     def report_no_show_voter(cls, voters):
-        fig3 = plt.figure(figsize=(cls.width, cls.height+5))
+        fig3 = plt.figure(figsize=(cls.width, cls.height+25))
         fig3.suptitle('Eleitores Ausentes', fontsize=20, fontweight='bold')
-        t = .9
-
-        fig3.text(.2, t, "Nome - CPF", fontsize=18, style='italic')
-        t -= 0.016
-
-        fig3.text(.2, t, "")
-        t -= 0.016
-
+        t = 0.97
+        # TODO FIX this method
         for voter in voters:
             if voter.votedFlag is False or voter.votedFlag is 0:
-                fig3.text(.2, t, voter.name + " - " + str(voter.cpf), fontsize=16)
-                t -= 0.016
+                fig3.text(.2, t, voter.name + " - " + str(voter.cpf), fontsize=12)
+                t -= 0.005
 
         cls.pdf.savefig(fig3)
         plt.close()
