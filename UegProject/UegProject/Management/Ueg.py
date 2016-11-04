@@ -31,7 +31,6 @@ class Ueg(object):
     endElectionToday = None
     currentUev = None
 
-    # TODO create constructor -> get all data from DataAccess
     def __init__(self):
         self.uevs = DataAccess.getUevList()
         self.allElections = Elections.testingElectionsModel()
@@ -99,14 +98,12 @@ class Ueg(object):
         candidates = self.getAllCandidates()
         voters = self.getAllVoters()
 
-        # just for testing
-        # self.testingVotes(candidates)
         if len(candidates) != 0 and len(voters) != 0:
             print 'Nao eh zero'
             t0 = Reports.initPdf()
             null_votes, white_votes = self.getAllNullWhiteVotes()
-            t1 = Reports.report_total_votes(candidates, null_votes, white_votes)
-            t2 = Reports.report_uev_votes(candidates, self.uevs, null_votes, white_votes)
+            t1 = Reports.report_total_votes(candidates)
+            t2 = Reports.report_candidates_votes(candidates, self.uevs, null_votes, white_votes)
             t3 = Reports.report_no_show_voter(voters)
             filename = Reports.close_pdf()
 
@@ -146,6 +143,10 @@ class Ueg(object):
 
         return null_votes, white_votes
 
+
+    """
+    FUNCTION JUST FOR TESTING \/
+    """
     def testingVotes(self, candidates):
         for c in np.arange(len(candidates)):
             candidates[c].setVotesPerUev("Sao Paulo", c + 10)

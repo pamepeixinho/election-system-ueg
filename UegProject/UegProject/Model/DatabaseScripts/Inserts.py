@@ -84,7 +84,7 @@ k = 0
 while k < 8:
     CPF = 352104 + i
     cursor.execute("insert into tb_candidato(CPF, Numero, Cargo_id, Estado_id, Pais_id, Votos)"
-                   " values(" + str(CPF) + "," + str(1+k) + ", 3,"+str(k%4 + 1)+", 1, 0);")
+                   " values(" + str(CPF) + "," + str(10+k) + ", 3,"+str(k%4 + 1)+", 1, 0);")
     i += 1
     k += 1
 
@@ -94,7 +94,7 @@ k = 0
 while k < 8:
     CPF = 352104 + i
     cursor.execute("insert into tb_candidato(CPF, Numero, Cargo_id, Estado_id, Pais_id, Votos)"
-                   " values(" + str(CPF) + "," + str(1+k) + ", 6,"+str(k%4 + 1)+", 1, 0);")
+                   " values(" + str(CPF) + "," + str(100+k) + ", 6,"+str(k%4 + 1)+", 1, 0);")
     i += 1
     k += 1
 
@@ -104,7 +104,7 @@ k = 0
 while k < 2:
     CPF = 352104 + i
     cursor.execute("insert into tb_candidato(CPF, Numero, Cargo_id, Pais_id, Votos)"
-                   " values(" + str(CPF) + "," + str(1+k) + ", 4, 1, 0);")
+                   " values(" + str(CPF) + "," + str(10000+k) + ", 4, 1, 0);")
     i += 1
     k += 1
 

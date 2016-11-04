@@ -66,24 +66,22 @@ class Communication(object):
 
     def ascertainment(self, request):
         self.__verifyIfNew()
-        # self.ueg.testingVotes(self.ueg.getAllCandidates())
+
         filename = self.ueg.ascertainment()
 
         if filename == u"Erro ao Carregar Apuração, recarregue esse página":
             return HttpResponse(filename)
 
-        # open the file
         with open(filename, "rb") as fid:
             filedata = fid.read()
 
         #  use this to download pdf
         # response = HttpResponse(filedata, content_type="text/plain")
 
-        #  use this to show pdf (can download too)
         response = HttpResponse(filedata, content_type="application/pdf")
         return response
 
-    # TODO verify requirement of this function and usage (Diagrams TOO)
+    # TODO add in diagram - fix names
     def candidatePhoto(self, request, candidate_name):
         print candidate_name
         image_path = None
@@ -114,7 +112,6 @@ class Communication(object):
             self.ueg = Ueg()
 
     # TODO verify and update __authenticate usage in diagrams
-
     def __authenticate(self, username, password, communicationType):
         if self.ueg.isValidUev(username=username, password=password):
             if self.ueg.isValidElection(communicationType):
@@ -132,6 +129,10 @@ class Communication(object):
         except IOError:
             return HttpResponse("null")
 
+
+    """
+    FUNCTIONS JUST FOR TEST \/
+    """
     @staticmethod
     def __testingWithVotersArray():
         r = Region("Sao Paulo", "Sao Paulo", "Brasil")
