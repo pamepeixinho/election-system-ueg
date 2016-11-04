@@ -23,7 +23,7 @@ communication = Communication.Communication()
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', communication.home, name='home'),
-    url(r'^load/$', communication.sendData, name='load'),
+    url(r'^load$', communication.sendData, name='load'),
     url(r'^results/$', communication.recieveData, name='results'),
     url(r'^candidate/(?P<candidate_name>\w*)/photo$', communication.candidatePhoto, name='photo'),
     url(r'^voters/(?P<voter_name>\w*)/photo$', communication.voterPhoto, name='photo'),

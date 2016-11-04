@@ -1,9 +1,9 @@
 import mysql.connector
 from random import randint
-#Sao paulo - Daniel
-#Sao Bernardo -  Marco
-#Rio de Janeiro - Brenno
-#Belo Horizonte - luis
+# Sao paulo - Daniel
+# Sao Bernardo -  Marco
+# Rio de Janeiro - Brenno
+# Belo Horizonte - luis
 
 file = open("names.txt", "r")
 names = file.read()
@@ -19,7 +19,7 @@ regionList = [["Sao Paulo", "Sao Paulo", "Brasil"], ["Sao Bernardo do Campo", "S
 
 
 db = mysql.connector.connect(user='root',
-                              password='xxxx',
+                              password='af12dc152e',
                               host='127.0.0.1',
                               database='ueg')
 cursor = db.cursor()
