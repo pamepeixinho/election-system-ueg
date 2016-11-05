@@ -21,7 +21,7 @@ class Elections(object):
 
     def __init__(self, electionList=None):
         self.__electionsList = electionList
-        self.__toleranceMinutesStart = 10
+        self.__toleranceMinutesStart = 60
         self.__toleranceMinutesEnd = 60
 
     def validElectionByCommunicationType(self, communication_type):
@@ -62,7 +62,7 @@ class Elections(object):
         d0 = ElectionDate(2016, 10, 29, 19, 10, 20, 0)
         d1 = ElectionDate(2016, 10, 31, 19, 30, 19, 0)
         d2 = ElectionDate(2016, 10, 28, 8, 0, 18, 0)
-        d3 = ElectionDate(2016, 11, 4, 22, 0, 21, 10)
+        d3 = ElectionDate(2016, 11, 5, 20, 0, 22, 10)
         d4 = ElectionDate(2016, 11, 7, 18, 0, 20, 0)
 
         list = [d0, d1, d2, d3, d4]

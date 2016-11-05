@@ -101,7 +101,7 @@ class Communication(object):
 
     def __getUevJson(self):
         uev_json = {
-            "electionEnd": self.ueg.endElectionToday.time(),
+            "electionEnd": self.ueg.endElectionToday.isoformat(),
             "voters": [v.toJSON() for v in self.ueg.getVotersPerUev()],
             "candidates": [c.toJSON() for c in self.ueg.getCandidatesPerUev()]
         }

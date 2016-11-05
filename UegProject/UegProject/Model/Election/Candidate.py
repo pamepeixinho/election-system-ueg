@@ -27,5 +27,6 @@ class Candidate(Voter):
         return {'name': self.name,
                 'number': self.number,
                 'role': self.role,
-                'nickname': self.nickname,
-                'photoURL': "127.0.0.1/candidate/{0}/photo".format(self.name)}
+                'nickname': self.nickname if self.nickname is not None else '',
+                'photoURL': "192.168.0.1/candidate/{0}/photo".format(self.name)
+                }
