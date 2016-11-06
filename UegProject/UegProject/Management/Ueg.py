@@ -48,7 +48,7 @@ class Ueg(object):
         valid_election, self.endElectionToday = self.allElections.validElectionByCommunicationType(communication_type)
         return valid_election
 
-    def fillVotes(self, votes_voters, votes_candidates, null_votes, white_votes):
+    def fillVotes(self, votes_voters, votes_candidates):
 
         print votes_voters
         print votes_candidates
@@ -58,9 +58,6 @@ class Ueg(object):
 
         self.setVotesPerCandidateLocal(votes_candidates)
         DataAccess.setVotesPerCandidate(self.getAllCandidates())
-
-        self.setVotesUevLocal(null_votes, white_votes)
-        # TODO data access update null and white votes
 
     def setFlagVotesVotersLocal(self, votes_voters):
         for i, x in enumerate(votes_voters):
@@ -79,7 +76,12 @@ class Ueg(object):
 
     def setVotesPerCandidateLocal(self, votes_candidates):
         for i, x in enumerate(votes_candidates):
-            candidate = self.getCandidateByNumber(votes_candidates[i]["number"])
+            number = votes_candidates[i]["number"]
+            candidate = self.getCandidateByNumber(number)
+
+            if candidate is None:
+                print "None Candidate %d" % number
+
             votes = votes_candidates[i]["votes"]
             candidate.votes += votes
             candidate.setVotesPerUev(self.currentUev.username, votes)
@@ -89,11 +91,6 @@ class Ueg(object):
             if candidate.number == number:
                 return candidate
 
-    def setVotesUevLocal(self, null_votes, white_votes):
-        uev = self.getUevByUsername(self.currentUev.username)
-        uev.null_votes = null_votes
-        uev.white_votes = white_votes
-
     def ascertainment(self):
         candidates = self.getAllCandidates()
         voters = self.getAllVoters()
@@ -101,9 +98,8 @@ class Ueg(object):
         if len(candidates) != 0 and len(voters) != 0:
             print 'Nao eh zero'
             t0 = Reports.initPdf()
-            null_votes, white_votes = self.getAllNullWhiteVotes()
             t1 = Reports.report_total_votes(candidates)
-            t2 = Reports.report_candidates_votes(candidates, self.uevs, null_votes, white_votes)
+            t2 = Reports.report_candidates_votes(candidates, self.uevs)
             t3 = Reports.report_no_show_voter(voters)
             filename = Reports.close_pdf()
 
@@ -133,20 +129,10 @@ class Ueg(object):
     def getAllUevs(self):
         return self.uevs
 
-    def getAllNullWhiteVotes(self):
-        null_votes = 0
-        white_votes = 0
-
-        for uev in self.uevs:
-            null_votes += uev.null_votes
-            white_votes += uev.white_votes
-
-        return null_votes, white_votes
-
-
     """
     FUNCTION JUST FOR TESTING \/
     """
+
     def testingVotes(self, candidates):
         for c in np.arange(len(candidates)):
             candidates[c].setVotesPerUev("Sao Paulo", c + 10)
@@ -158,16 +144,12 @@ class Ueg(object):
         self.uevs = [
             Uev("pamela", "1234", Region("Sao Paulo", "sao paulo", "Brasil"), self.testingWithVotersArray(), 1),
             Uev("admin", "admin", Region("Sao Bernardo do Campo", "sao paulo", "Brasil"),
-                self.testingWithVotersArray(),1)
+                self.testingWithVotersArray(), 1)
         ]
         for c in self.testingWithCandidatesArray():
             self.uevs[0].addCandidate(c)
             self.uevs[1].addCandidate(c)
-            
-        self.uevs[0].null_votes = 10
-        self.uevs[1].null_votes = 20
-        self.uevs[0].white_votes = 20
-        self.uevs[1].white_votes = 10
+
         self.allElections = Elections.testingElectionsModel()
 
     @staticmethod
@@ -182,7 +164,6 @@ class Ueg(object):
                          RoleType.GOVERNADOR, "peixinho")
                ]
         return vt2
-
 
     @staticmethod
     def testingWithVotersArray():

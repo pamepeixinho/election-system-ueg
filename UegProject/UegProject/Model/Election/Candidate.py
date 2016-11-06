@@ -26,7 +26,8 @@ class Candidate(Voter):
     def toJSON(self):
         return {'name': self.name,
                 'number': self.number,
-                'role': self.role,
+                'role': str(self.role).upper(),
                 'nickname': self.nickname if self.nickname is not None else '',
-                'photoURL': "192.168.0.1/candidate/{0}/photo".format(self.name)
+                'photoURL': "192.168.0.1/candidate/{0}/photo".format(
+                    self.name) if self.name != "NULO" and self.name != "BRANCO" else ""
                 }

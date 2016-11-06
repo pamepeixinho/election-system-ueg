@@ -25,31 +25,33 @@ class Reports(object):
 
     @classmethod
     def report_total_votes(cls, candidates):
+        c_array = candidates
         fig1 = plt.figure(figsize=(cls.width, 30))
         grid = GridSpec(3, 2)
 
         prefeito = [c for c in candidates if c.role == "Prefeito"]
-        print 'prefeito'
+        prefeito = cls.array_without_duplicate_candidate(prefeito)
+
         if len(prefeito) > 0:
             cls._plot_by_cargo(prefeito, grid, 0, 0, "Prefeito")
 
         vereador = [c for c in candidates if c.role == "Vereador"]
-        print 'Vereador'
+        vereador = cls.array_without_duplicate_candidate(vereador)
         if len(vereador) > 0:
             cls._plot_by_cargo(vereador, grid, 1, 0, "Vereador")
 
         governador = [c for c in candidates if c.role == "Governador"]
-        print 'Governador'
+        governador = cls.array_without_duplicate_candidate(governador)
         if len(governador) > 0:
             cls._plot_by_cargo(governador, grid, 2, 0, "Governador")
 
         presidente = [c for c in candidates if c.role == "Presidente"]
-        print 'Presidente'
+        presidente = cls.array_without_duplicate_candidate(presidente)
         if len(presidente) > 0:
             cls._plot_by_cargo(presidente, grid, 0, 1, "Presidente")
 
         deputado = [c for c in candidates if c.role == "Deputado"]
-        print 'Deputado'
+        deputado = cls.array_without_duplicate_candidate(deputado)
         if len(deputado) > 0:
             cls._plot_by_cargo(deputado, grid, 1, 1, "Deputado")
 
@@ -64,6 +66,23 @@ class Reports(object):
         return "OK"
 
     @classmethod
+    def array_without_duplicate_candidate(cls, candidates):
+        c_unique = []
+
+        for c in candidates:
+            if cls._find_in_candidate_array(c_unique, c.number) is not True:
+                c_unique.append(c)
+        return c_unique
+
+    @classmethod
+    def _find_in_candidate_array(cls, candidates, number):
+        for c in candidates:
+            if c.number == number:
+                return True
+        return False
+
+
+    @classmethod
     def _plot_by_cargo(cls, candidates, grid, i, j, cargo):
         x_ind = np.arange(len(candidates))
         y_votes = [p.getTotalVotes() for p in candidates]
@@ -76,24 +95,17 @@ class Reports(object):
         plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
 
     @classmethod
-    def report_candidates_votes(cls, candidates, uevs, total_null_votes, total_white_votes):
+    def report_candidates_votes(cls, candidates, uevs):
         candidates = Reports._remove_candidate_without_votes(candidates)
-        fig2 = plt.figure(figsize=(cls.width, 4.5 * max(len(candidates), 2)))
-        grid = GridSpec(max(len(candidates), 2), 2)
+        c_size = int((len(candidates) / 2) + 0.5)
+        fig2 = plt.figure(figsize=(cls.width, 4.5 * c_size))
+        grid = GridSpec(c_size, 2)
 
         flag = False
 
         if len(candidates) > 0:
             flag = True
-            cls._get_candidate_pies(candidates, grid)
-
-        if total_null_votes > 0:
-            flag = True
-            cls._get_null_pie(uevs, total_null_votes, grid)
-
-        if total_white_votes > 0:
-            flag = True
-            cls._get_white_pie(uevs, total_white_votes, grid)
+            cls._get_candidate_pies(candidates, grid, c_size)
 
         fig2.suptitle('Votos x Uev', fontsize=20, fontweight='bold')
 
@@ -113,11 +125,12 @@ class Reports(object):
         ax = fig3.add_subplot(111)
         ax.axis('off')
 
-        column_name = ["Nome", "CPF"]
-        data = [[voter.name, voter.cpf] for voter in voters if voter.votedFlag is False or voter.votedFlag is 0]
+        column_name = ["Nome", "CPF", "Cidade"]
+        data = [[voter.name, voter.cpf, voter.region.city] for voter in voters if
+                voter.votedFlag is False or voter.votedFlag is 0]
 
         the_table = plt.table(cellText=data,
-                              colWidths=[.3, .3],
+                              colWidths=[.3, .3, .3],
                               colLabels=column_name,
                               loc='center')
 
@@ -141,29 +154,18 @@ class Reports(object):
         return [candidate for candidate in candidates if candidate.getTotalVotes() > 0]
 
     @classmethod
-    def _get_candidate_pies(cls, candidates, grid):
-        for i, candidate in enumerate(candidates):
-            regions = [key for key, value in candidate.qntVotesPerUev.iteritems() if value > 0]
-            percentages_regions = [value for key, value in candidate.qntVotesPerUev.iteritems() if value > 0]
-            cls._extract_pie_subplot('Candidato: ' + candidate.name, i, 0, percentages_regions, regions, grid)
-
-    @classmethod
-    def _get_null_pie(cls, uevs, total_votes, grid):
-        if total_votes == 0:
-            return
-
-        regions = [uev.username for uev in uevs if uev.null_votes > 0]
-        percentages_regions = [uev.null_votes for uev in uevs if uev.null_votes > 0]
-        cls._extract_pie_subplot("Votos Nulos", 0, 1, percentages_regions, regions, grid)
-
-    @classmethod
-    def _get_white_pie(cls, uevs, total_votes, grid):
-        if total_votes == 0:
-            return
-
-        regions = [uev.username for uev in uevs if uev.white_votes > 0]
-        percentages_regions = [uev.white_votes for uev in uevs if uev.white_votes > 0]
-        cls._extract_pie_subplot("Votos em branco", 1, 1, percentages_regions, regions, grid)
+    def _get_candidate_pies(cls, candidates, grid, c_size):
+        k = 0
+        for i in np.arange(c_size):
+            for j in np.arange(2):
+                if k >= len(candidates):
+                    return
+                candidate = candidates[k]
+                regions = [key for key, value in candidate.qntVotesPerUev.iteritems() if value > 0]
+                percentages_regions = [value for key, value in candidate.qntVotesPerUev.iteritems() if value > 0]
+                cls._extract_pie_subplot(candidate.role.upper() + ':' + candidate.name, i, j, percentages_regions,
+                                         regions, grid)
+                k += 1
 
     values = []
 
@@ -173,7 +175,6 @@ class Reports(object):
             return -1
         explode = [0] * len(regions)
         explode[0] = 0.1
-        # random.shuffle(cls.colors)
         plt.subplot(grid[i, j], title=title)
         cls.values = percentages_regions
         patches, texts, _ = plt.pie(percentages_regions, colors=cls.colors, autopct=cls._my_autopct,

@@ -42,7 +42,7 @@ class Communication(object):
     @csrf_exempt
     def recieveData(self, request):
         """
-        curl -H "Content-Type: application/json" -X POST -d '{"username":"pamela", "password":"81dc9bdb52d04dc20036dbd8313ed055", "voters":"v", "candidates":"c", "nullVotes":"null", "whiteVotes":"null"}' 127.0.0.1:8181/results/
+        curl -H "Content-Type: application/json" -X POST -d '{"username":"pamela", "password":"81dc9bdb52d04dc20036dbd8313ed055", "voters":"v", "candidates":"c"}' 127.0.0.1:8181/results
         """
         if request.method != 'POST':
             return HttpResponse(ErrorCodes.WRONG_REQUEST)
@@ -55,12 +55,7 @@ class Communication(object):
         if authenticated is not True:
             return HttpResponseForbidden('ERRO {0}'.format(authenticated))
 
-        print json_data["voters"][0]["voted"]
-        print json_data["whiteVotes"]
-        print json_data["nullVotes"]
-
-        self.ueg.fillVotes(json_data["voters"], json_data["candidates"],
-                           json_data["nullVotes"], json_data["whiteVotes"])
+        self.ueg.fillVotes(json_data["voters"], json_data["candidates"])
 
         return HttpResponse('OK')
 
@@ -100,11 +95,13 @@ class Communication(object):
         return self._get_image_response("VotersImages", image_path)
 
     def __getUevJson(self):
+
         uev_json = {
             "electionEnd": self.ueg.endElectionToday.isoformat(),
             "voters": [v.toJSON() for v in self.ueg.getVotersPerUev()],
             "candidates": [c.toJSON() for c in self.ueg.getCandidatesPerUev()]
         }
+
         return uev_json
 
     def __verifyIfNew(self):

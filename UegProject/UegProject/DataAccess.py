@@ -78,7 +78,7 @@ class DataAccess:
 
         for uev in cls.__uevList:
             for candidate in cls.__candidateListDB:
-                if candidate[8] == "Presidente":
+                if candidate[8] == "Presidente" or candidate[0] == "NULO" or candidate[0] == "BRANCO":
                     uev.addCandidate(Candidate(candidate[0], candidate[1], candidate[2], Region(candidate[3],
                                                                                                 candidate[4],
                                                                                                 candidate[5]),
