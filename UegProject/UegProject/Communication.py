@@ -70,22 +70,12 @@ class Communication(object):
         with open(filename, "rb") as fid:
             filedata = fid.read()
 
-        #  use this to download pdf
-        # response = HttpResponse(filedata, content_type="text/plain")
-
         response = HttpResponse(filedata, content_type="application/pdf")
         return response
 
     # TODO add in diagram - fix names
     def candidatePhoto(self, request, candidate_name):
-        print candidate_name
-        image_path = None
-        if candidate_name == "vader":
-            image_path = "DarthVader2016"
-        elif candidate_name == "peixinho":
-            image_path = "dory2016"
-
-        return self._get_image_response("CandidatesImages", image_path)
+        return self._get_image_response("CandidatesImages", candidate_name)
 
     def voterPhoto(self, request, voter_name):
         image_path = None

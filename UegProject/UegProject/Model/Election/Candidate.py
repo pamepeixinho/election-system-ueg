@@ -29,5 +29,13 @@ class Candidate(Voter):
                 'role': str(self.role).upper(),
                 'nickname': self.nickname if self.nickname is not None else '',
                 'photoURL': "192.168.0.1/candidate/{0}/photo".format(
-                    self.name) if self.name != "NULO" and self.name != "BRANCO" else ""
+                    Candidate._get_url(self.name)) if self.name != "NULO" and self.name != "BRANCO" else ""
                 }
+
+    @staticmethod
+    def _get_url(name):
+        if name == "DARTH VADER":
+            return "VADER"
+        else:
+            return name
+
