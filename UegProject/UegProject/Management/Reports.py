@@ -30,28 +30,28 @@ class Reports(object):
         grid = GridSpec(3, 2)
 
         prefeito = [c for c in candidates if c.role == "Prefeito"]
-        prefeito = cls.array_without_duplicate_candidate(prefeito)
+        prefeito = cls._array_without_duplicate_candidate(prefeito)
 
         if len(prefeito) > 0:
             cls._plot_by_cargo(prefeito, grid, 0, 0, "Prefeito")
 
         vereador = [c for c in candidates if c.role == "Vereador"]
-        vereador = cls.array_without_duplicate_candidate(vereador)
+        vereador = cls._array_without_duplicate_candidate(vereador)
         if len(vereador) > 0:
             cls._plot_by_cargo(vereador, grid, 1, 0, "Vereador")
 
         governador = [c for c in candidates if c.role == "Governador"]
-        governador = cls.array_without_duplicate_candidate(governador)
+        governador = cls._array_without_duplicate_candidate(governador)
         if len(governador) > 0:
             cls._plot_by_cargo(governador, grid, 2, 0, "Governador")
 
         presidente = [c for c in candidates if c.role == "Presidente"]
-        presidente = cls.array_without_duplicate_candidate(presidente)
+        presidente = cls._array_without_duplicate_candidate(presidente)
         if len(presidente) > 0:
             cls._plot_by_cargo(presidente, grid, 0, 1, "Presidente")
 
         deputado = [c for c in candidates if c.role == "Deputado"]
-        deputado = cls.array_without_duplicate_candidate(deputado)
+        deputado = cls._array_without_duplicate_candidate(deputado)
         if len(deputado) > 0:
             cls._plot_by_cargo(deputado, grid, 1, 1, "Deputado")
 
@@ -66,36 +66,7 @@ class Reports(object):
         return "OK"
 
     @classmethod
-    def array_without_duplicate_candidate(cls, candidates):
-        c_unique = []
-
-        for c in candidates:
-            if cls._find_in_candidate_array(c_unique, c.number) is not True:
-                c_unique.append(c)
-        return c_unique
-
-    @classmethod
-    def _find_in_candidate_array(cls, candidates, number):
-        for c in candidates:
-            if c.number == number:
-                return True
-        return False
-
-
-    @classmethod
-    def _plot_by_cargo(cls, candidates, grid, i, j, cargo):
-        x_ind = np.arange(len(candidates))
-        y_votes = [p.getTotalVotes() for p in candidates]
-        names = [p.name for p in candidates]
-
-        plt.subplot(grid[i, j], title="Cargo: {0}".format(cargo))
-        random.shuffle(cls.colors)
-        plt.bar(x_ind, y_votes, align='center', alpha=1, color=cls.colors)
-        plt.xticks(x_ind, names, rotation='vertical')
-        plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
-
-    @classmethod
-    def report_candidates_votes(cls, candidates, uevs):
+    def report_candidates_votes(cls, candidates):
         candidates = Reports._remove_candidate_without_votes(candidates)
         c_size = int((len(candidates) / 2) + 0.5)
         fig2 = plt.figure(figsize=(cls.width, 4.5 * c_size))
@@ -148,6 +119,36 @@ class Reports(object):
 
         plt.close()
         return "OK"
+
+    @classmethod
+    def _array_without_duplicate_candidate(cls, candidates):
+        c_unique = []
+
+        for c in candidates:
+            if cls._find_in_candidate_array(c_unique, c.number) is not True:
+                c_unique.append(c)
+        return c_unique
+
+    @classmethod
+    def _find_in_candidate_array(cls, candidates, number):
+        for c in candidates:
+            if c.number == number:
+                return True
+        return False
+
+
+    @classmethod
+    def _plot_by_cargo(cls, candidates, grid, i, j, cargo):
+        x_ind = np.arange(len(candidates))
+        y_votes = [p.getTotalVotes() for p in candidates]
+        names = [p.name for p in candidates]
+
+        plt.subplot(grid[i, j], title="Cargo: {0}".format(cargo))
+        random.shuffle(cls.colors)
+        plt.bar(x_ind, y_votes, align='center', alpha=1, color=cls.colors)
+        plt.xticks(x_ind, names, rotation='vertical')
+        plt.subplots_adjust(left=0.1, right=0.9, top=0.9, bottom=0.1)
+
 
     @staticmethod
     def _remove_candidate_without_votes(candidates):

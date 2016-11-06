@@ -12,17 +12,16 @@ class Candidate(Voter):
         self.qntVotesPerUev = {}
         self.votes = 0
 
-    # TODO add in class diagram
     def setVotesPerUev(self, uev_username, votes):
         self.qntVotesPerUev[uev_username] = votes
 
     def getTotalVotes(self):
         total = 0
-        for region, value in self.qntVotesPerUev.iteritems():
+        for uev_username, value in self.qntVotesPerUev.iteritems():
             total += value
         return total
 
-    # TODO diagram and fix IP address
+    # TODO verify IP address
     def toJSON(self):
         return {'name': self.name,
                 'number': self.number,

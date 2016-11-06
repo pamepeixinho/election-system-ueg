@@ -53,31 +53,26 @@ class Ueg(object):
         print votes_voters
         print votes_candidates
 
-        self.setFlagVotesVotersLocal(votes_voters)
+        self._setFlagVotesVotersLocal(votes_voters)
         DataAccess.setFlagVotesVoter(self.getAllVoters())
 
-        self.setVotesPerCandidateLocal(votes_candidates)
+        self._setVotesPerCandidateLocal(votes_candidates)
         DataAccess.setVotesPerCandidate(self.getAllCandidates())
 
-    def setFlagVotesVotersLocal(self, votes_voters):
+    def _setFlagVotesVotersLocal(self, votes_voters):
         for i, x in enumerate(votes_voters):
-            voter = self.getVoterByCPF(votes_voters[i]["cpf"])
+            voter = self._getVoterByCPF(votes_voters[i]["cpf"])
             voter.votedFlag = votes_voters[i]["voted"]
 
-    def getVoterByCPF(self, cpf):
+    def _getVoterByCPF(self, cpf):
         for voter in self.getAllVoters():
             if voter.cpf == cpf:
                 return voter
 
-    def getUevByUsername(self, username):
-        for uev in self.uevs:
-            if uev.username == username:
-                return uev
-
-    def setVotesPerCandidateLocal(self, votes_candidates):
+    def _setVotesPerCandidateLocal(self, votes_candidates):
         for i, x in enumerate(votes_candidates):
             number = votes_candidates[i]["number"]
-            candidate = self.getCandidateByNumber(number)
+            candidate = self._getCandidateByNumber(number)
 
             if candidate is None:
                 print "None Candidate %d" % number
@@ -86,7 +81,7 @@ class Ueg(object):
             candidate.votes += votes
             candidate.setVotesPerUev(self.currentUev.username, votes)
 
-    def getCandidateByNumber(self, number):
+    def _getCandidateByNumber(self, number):
         for candidate in self.getAllCandidates():
             if candidate.number == number:
                 return candidate
@@ -96,15 +91,14 @@ class Ueg(object):
         voters = self.getAllVoters()
 
         if len(candidates) != 0 and len(voters) != 0:
-            print 'Nao eh zero'
             t0 = Reports.initPdf()
             t1 = Reports.report_total_votes(candidates)
-            t2 = Reports.report_candidates_votes(candidates, self.uevs)
+            t2 = Reports.report_candidates_votes(candidates)
             t3 = Reports.report_no_show_voter(voters)
             filename = Reports.close_pdf()
 
             if t0 != "OK" or t1 != "OK" or t2 != "OK" or t3 != "OK" or filename != "output.pdf":
-                return u"Erro ao Carregar Apuração, recarregue esse página"
+                return u"Erro ao Carregar apuração de votos, recarregue esse página"
 
         return filename
 
