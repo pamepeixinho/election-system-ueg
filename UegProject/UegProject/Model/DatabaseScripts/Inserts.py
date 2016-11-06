@@ -19,7 +19,7 @@ regionList = [["Sao Paulo", "Sao Paulo", "Brasil"], ["Sao Bernardo do Campo", "S
 
 
 db = mysql.connector.connect(user='root',
-                              password='xxxx',
+                              password='xxx',
                               host='127.0.0.1',
                               database='ueg')
 cursor = db.cursor()
@@ -49,7 +49,7 @@ cursor.execute("INSERT INTO tb_cidade (Cidade, estado_id) "
 
 i = 0
 j = 352104
-namesList = namesList[0:280]
+namesList = namesList[0:84]
 
 for name in namesList:
     cursor.execute("INSERT INTO tb_eleitor(CPF, Nome, Cidade_id, URL, Votou)"

@@ -27,7 +27,7 @@ class Candidate(Voter):
                 'number': self.number,
                 'role': str(self.role).upper(),
                 'nickname': self.nickname if self.nickname is not None else '',
-                'photoURL': "192.168.0.1/candidate/{0}/photo".format(
+                'photoURL': "192.168.0.1:8181/candidate/{0}/photo".format(
                     Candidate._get_url(self.name)) if self.name != "NULO" and self.name != "BRANCO" else ""
                 }
 

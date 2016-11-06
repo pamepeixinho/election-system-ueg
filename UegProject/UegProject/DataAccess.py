@@ -23,7 +23,7 @@ class DataAccess:
     def _connect_database(cls):
         try:
             cls.db = mysql.connector.connect(user='root',
-                                             password='xxxx',
+                                             password='xxx',
                                              host='127.0.0.1',
                                              database='ueg')
             cls.cursor = cls.db.cursor()

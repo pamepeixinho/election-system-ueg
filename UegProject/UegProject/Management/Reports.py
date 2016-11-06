@@ -91,13 +91,13 @@ class Reports(object):
 
     @classmethod
     def report_no_show_voter(cls, voters):
-        fig3 = plt.figure(figsize=(18, 70))
+        fig3 = plt.figure(figsize=(15, 20))
         fig3.suptitle('Eleitores Ausentes', fontsize=20, fontweight='bold', y=0.98)
         ax = fig3.add_subplot(111)
         ax.axis('off')
 
-        column_name = ["Nome", "CPF", "Cidade"]
-        data = [[voter.name, voter.cpf, voter.region.city] for voter in voters if
+        column_name = ["Nome", "CPF", "Uev"]
+        data = [[voter.name, voter.cpf, voter.region.state] for voter in voters if
                 voter.votedFlag is False or voter.votedFlag is 0]
 
         the_table = plt.table(cellText=data,
@@ -109,11 +109,11 @@ class Reports(object):
         table_cells = table_props['child_artists']
         for cell in table_cells:
             cell.set_width(0.2)
-            cell.set_height(0.004)
+            cell.set_height(0.012)
             cell._loc = 'left'
 
         try:
-            cls.pdf.savefig(fig3, dpi=(200))
+            cls.pdf.savefig(fig3)
         except Exception, e:
             return "Erro ao Carregar Apuração, recarregue esse página"
 
