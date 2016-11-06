@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ContentFilters</key>
+	<dict/>
+	<key>auto_connect</key>
+	<true/>
+	<key>data</key>
+	<dict>
+		<key>connection</key>
+		<dict>
+			<key>database</key>
+			<string>ueg</string>
+			<key>host</key>
+			<string>127.0.0.1</string>
+			<key>kcid</key>
+			<string>-4650247823180560762</string>
+			<key>name</key>
+			<string>local</string>
+			<key>rdbms_type</key>
+			<string>mysql</string>
+			<key>sslCACertFileLocation</key>
+			<string></string>
+			<key>sslCACertFileLocationEnabled</key>
+			<integer>0</integer>
+			<key>sslCertificateFileLocation</key>
+			<string></string>
+			<key>sslCertificateFileLocationEnabled</key>
+			<integer>0</integer>
+			<key>sslKeyFileLocation</key>
+			<string></string>
+			<key>sslKeyFileLocationEnabled</key>
+			<integer>0</integer>
+			<key>type</key>
+			<string>SPTCPIPConnection</string>
+			<key>useSSL</key>
+			<integer>0</integer>
+			<key>user</key>
+			<string>root</string>
+		</dict>
+		<key>session</key>
+		<dict>
+			<key>connectionEncoding</key>
+			<string>latin1</string>
+			<key>contentFilter</key>
+			<dict/>
+			<key>contentPageNumber</key>
+			<integer>1</integer>
+			<key>contentSelection</key>
+			<data>
+			YnBsaXN0MDDUAQIDBAUGNjdYJHZlcnNpb25YJG9iamVjdHNZJGFy
+			Y2hpdmVyVCR0b3ASAAGGoK0HCBUWFxgZHSQoLDA0VSRudWxs0wkK
+			CwwQFFdOUy5rZXlzWk5TLm9iamVjdHNWJGNsYXNzow0OD4ACgAOA
+			BKMREhOABYAGgAiADFR0eXBlVHJvd3NUa2V5c18QJlNlbGVjdGlv
+			bkRldGFpbFR5cGVQcmltYXJ5S2V5ZWREZXRhaWxz0wkKCxobHKCg
+			gAfSHh8gIVokY2xhc3NuYW1lWCRjbGFzc2VzXxATTlNNdXRhYmxl
+			RGljdGlvbmFyeaMgIiNcTlNEaWN0aW9uYXJ5WE5TT2JqZWN00goL
+			JSehJoAJgAvSCykqK1lOUy5zdHJpbmeAClNDUEbSHh8tLl8QD05T
+			TXV0YWJsZVN0cmluZ6MtLyNYTlNTdHJpbmfSHh8xMl5OU011dGFi
+			bGVBcnJheaMxMyNXTlNBcnJhedIeHyI1oiIjXxAPTlNLZXllZEFy
+			Y2hpdmVy0Tg5VGRhdGGAAQAIABEAGgAjAC0AMgA3AEUASwBSAFoA
+			ZQBsAHAAcgB0AHYAegB8AH4AgACCAIcAjACRALoAwQDCAMMAxQDK
+			ANUA3gD0APgBBQEOARMBFQEXARkBHgEoASoBLgEzAUUBSQFSAVcB
+			ZgFqAXIBdwF6AYwBjwGUAAAAAAAAAgEAAAAAAAAAOgAAAAAAAAAA
+			AAAAAAAAAZY=
+			</data>
+			<key>contentSortColIsAsc</key>
+			<true/>
+			<key>contentViewport</key>
+			<string>{{0, 0}, {1065, 568}}</string>
+			<key>isToolbarVisible</key>
+			<true/>
+			<key>queries</key>
+			<string>-- candidatos
+
+SELECT EL.Nome, CA.Numero, CAR.Cargo, if (E.Estado is NULL, "Disponivel em Todas as UEVs", E.Estado) as "Disponibilidade nas Uevs"
+	FROM tb_candidato AS CA
+	    INNER JOIN tb_eleitor AS EL ON CA.CPF = EL.CPF
+    	LEFT JOIN tb_estado AS E ON CA.Estado_id = E.Estado_id 
+    	INNER JOIN tb_cargo AS CAR ON CA.Cargo_id = CAR.cargo_id
+    WHERE EL.Nome != "NULO" and EL.Nome != "BRANCO"
+    	;
+    	
+-- eleitores  
+SELECT EL.nome, EL.cpf, E.Estado as "Uev"
+                       FROM tb_eleitor AS EL
+                       INNER JOIN tb_cidade AS C ON EL.Cidade_id = C.Cidade_id
+                       INNER JOIN tb_estado AS E ON C.Estado_id = E.Estado_id
+WHERE EL.Nome != "NULO" and EL.Nome != "BRANCO"
+                       ;
+
+</string>
+			<key>table</key>
+			<string>tb_Candidato</string>
+			<key>view</key>
+			<string>SP_VIEW_CUSTOMQUERY</string>
+			<key>windowVerticalDividerPosition</key>
+			<real>200</real>
+		</dict>
+	</dict>
+	<key>encrypted</key>
+	<false/>
+	<key>format</key>
+	<string>connection</string>
+	<key>queryFavorites</key>
+	<array/>
+	<key>queryHistory</key>
+	<array>
+		<string>SELECT EL.nome, EL.cpf, E.Estado as "Uev"
+                       FROM tb_eleitor AS EL
+                       INNER JOIN tb_cidade AS C ON EL.Cidade_id = C.Cidade_id
+                       INNER JOIN tb_estado AS E ON C.Estado_id = E.Estado_id
+WHERE EL.Nome != "NULO" and EL.Nome != "BRANCO"</string>
+		<string>SELECT EL.Nome, CA.Numero, CAR.Cargo, if (E.Estado is NULL, "Disponivel em Todas as UEVs", E.Estado) as "Disponibilidade nas Uevs"
+	FROM tb_candidato AS CA
+	    INNER JOIN tb_eleitor AS EL ON CA.CPF = EL.CPF
+    	LEFT JOIN tb_estado AS E ON CA.Estado_id = E.Estado_id 
+    	INNER JOIN tb_cargo AS CAR ON CA.Cargo_id = CAR.cargo_id
+    WHERE EL.Nome != "NULO" and EL.Nome != "BRANCO"</string>
+		<string>SELECT EL.Nome, CAR.Cargo, if (E.Estado is NULL, "Disponivel em Todas as UEVs", E.Estado) as "Disponibilidade nas Uevs"
+	FROM tb_candidato AS CA
+	    INNER JOIN tb_eleitor AS EL ON CA.CPF = EL.CPF
+    	LEFT JOIN tb_estado AS E ON CA.Estado_id = E.Estado_id 
+    	INNER JOIN tb_cargo AS CAR ON CA.Cargo_id = CAR.cargo_id
+    WHERE EL.Nome != "NULO" and EL.Nome != "BRANCO"</string>
+		<string>SELECT EL.Nome, CAR.Cargo, if (E.Estado is NULL, "Disponivel em Todas as UEVs", E.Estado) as Disponibilidade nas Uevs
+	FROM tb_candidato AS CA
+	    INNER JOIN tb_eleitor AS EL ON CA.CPF = EL.CPF
+    	LEFT JOIN tb_estado AS E ON CA.Estado_id = E.Estado_id 
+    	INNER JOIN tb_cargo AS CAR ON CA.Cargo_id = CAR.cargo_id
+    WHERE EL.Nome != "NULO" and EL.Nome != "BRANCO"</string>
+		<string>SELECT EL.Nome, CAR.Cargo, if (E.Estado is NULL, "Disponivel em Todas as UEVs", E.Estado)
+	FROM tb_candidato AS CA
+	    INNER JOIN tb_eleitor AS EL ON CA.CPF = EL.CPF
+    	LEFT JOIN tb_estado AS E ON CA.Estado_id = E.Estado_id 
+    	INNER JOIN tb_cargo AS CAR ON CA.Cargo_id = CAR.cargo_id
+    WHERE EL.Nome != "NULO" and EL.Nome != "BRANCO"</string>
+		<string>SELECT EL.Nome, CAR.Cargo, E.Estado
+                           FROM tb_candidato AS CA
+                           INNER JOIN tb_eleitor AS EL ON CA.CPF = EL.CPF
+                           LEFT JOIN tb_estado AS E ON CA.Estado_id = E.Estado_id 
+                           INNER JOIN tb_cargo AS CAR ON CA.Cargo_id = CAR.cargo_id</string>
+		<string>select i.id, ag.status, ag.ultimoEmailEnviado, ag.confirmado
+from Imovel as i
+join Agendamento as ag on i.id = ag.imovel_id
+where i.status = "publicado" and (ag.ultimoEmailEnviado and ag.confirmado) is not null</string>
+		<string>select i.id, ag.status, ag.ultimoEmailEnviado, ag.confirmado
+from Imovel as i
+join Agendamento as ag on i.id = v.imovel_id
+where i.status = "publicado" and (ag.ultimoEmailEnviado and ag.confirmado) is not null</string>
+		<string>select distinct status from Imovel</string>
+		<string>select imovel_id, ultimoEmailEnviado, confirmado 
+from Agendamento 
+where (ultimoEmailEnviado and confirmado) is not null</string>
+		<string>select imovel_id, ultimoEmailEnviado, confirmado 
+from Agendamento 
+where ultimoEmailEnviado is not null and confirmado is not null 
+order by 1 asc</string>
+		<string>select ultimoEmailEnviado, confirmado 
+from Agendamento 
+where ultimoEmailEnviado is not null and confirmado is not null 
+order by 1 asc</string>
+		<string>select ultimoEmailEnviado, confirmado 
+from Agendamento 
+where data 
+order by 1 desc</string>
+		<string>select ultimoEmailEnviado, confirmado 
+from Agendamento 
+where data 
+order by 1 asc</string>
+		<string>select * from Agendamento order by id desc</string>
+		<string>select * from Imovel</string>
+		<string>select v.informacoesVisita, count(i.id) from Imovel as i join Imovel_informacoesVisita as v on i.id = v.imovel_id
+where status = 'publicado' group by v.informacoesVisita</string>
+		<string>select * from Imovel_informacoesVisita</string>
+		<string>select * from Imovel_Etapas</string>
+		<string>select ultimoEmailEnviado, confirmado from Agendamento order by 1 asc</string>
+	</array>
+	<key>rdbms_type</key>
+	<string>mysql</string>
+	<key>rdbms_version</key>
+	<string>5.7.11</string>
+	<key>version</key>
+	<integer>1</integer>
+</dict>
+</plist>

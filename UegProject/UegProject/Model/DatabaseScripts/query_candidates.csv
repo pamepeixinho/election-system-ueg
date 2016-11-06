@@ -1,0 +1,43 @@
+Nome,Numero,Cargo,Disponibilidade nas Uevs
+PAUL,100002,Prefeito,Sao Paulo
+JENNIFER,100006,Prefeito,Sao Paulo
+JAMES,1002,Vereador,Sao Paulo
+MARY,1006,Vereador,Sao Paulo
+CHARLES,1010,Vereador,Sao Paulo
+CHRISTOPHER,1014,Vereador,Sao Paulo
+SUSAN,12,Governador,Sao Paulo
+BRIAN,16,Governador,Sao Paulo
+LISA,102,Deputado,Sao Paulo
+BETTY,106,Deputado,Sao Paulo
+MARK,100003,Prefeito,Minas Gerais
+GEORGE,100007,Prefeito,Minas Gerais
+JOHN,1003,Vereador,Minas Gerais
+WILLIAM,1007,Vereador,Minas Gerais
+JOSEPH,1011,Vereador,Minas Gerais
+LINDA,1015,Vereador,Minas Gerais
+STEVEN,13,Governador,Minas Gerais
+RONALD,17,Governador,Minas Gerais
+KEVIN,103,Deputado,Minas Gerais
+HELEN,107,Deputado,Minas Gerais
+ELIZABETH,100004,Prefeito,Rio de Janeiro
+MARIA,100008,Prefeito,Rio de Janeiro
+ROBERT,1004,Vereador,Rio de Janeiro
+DAVID,1008,Vereador,Rio de Janeiro
+THOMAS,1012,Vereador,Rio de Janeiro
+BARBARA,1016,Vereador,Rio de Janeiro
+EDWARD,14,Governador,Rio de Janeiro
+DOROTHY,18,Governador,Rio de Janeiro
+NANCY,104,Deputado,Rio de Janeiro
+JASON,108,Deputado,Rio de Janeiro
+DONALD,100005,Prefeito,Rio Grande do Sul
+KENNETH,100009,Prefeito,Rio Grande do Sul
+MICHAEL,1005,Vereador,Rio Grande do Sul
+RICHARD,1009,Vereador,Rio Grande do Sul
+PATRICIA,1013,Vereador,Rio Grande do Sul
+DANIEL,1017,Vereador,Rio Grande do Sul
+MARGARET,15,Governador,Rio Grande do Sul
+ANTHONY,19,Governador,Rio Grande do Sul
+KAREN,105,Deputado,Rio Grande do Sul
+MATTHEW,109,Deputado,Rio Grande do Sul
+GARY,10002,Presidente,Disponivel em Todas as UEVs
+TIMOTHY,10003,Presidente,Disponivel em Todas as UEVs
