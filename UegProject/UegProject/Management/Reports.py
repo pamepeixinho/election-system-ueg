@@ -24,43 +24,64 @@ class Reports(object):
         return "OK"
 
     @classmethod
-    def report_total_votes(cls, candidates):
-        c_array = candidates
+    def report_total_votes(cls, candidates, uevs):
         fig1 = plt.figure(figsize=(cls.width, 30))
         grid = GridSpec(3, 2)
-
-        prefeito = [c for c in candidates if c.role == "Prefeito"]
-        prefeito = cls._array_without_duplicate_candidate(prefeito)
-
-        if len(prefeito) > 0:
-            cls._plot_by_cargo(prefeito, grid, 0, 0, "Prefeito")
-
-        vereador = [c for c in candidates if c.role == "Vereador"]
-        vereador = cls._array_without_duplicate_candidate(vereador)
-        if len(vereador) > 0:
-            cls._plot_by_cargo(vereador, grid, 1, 0, "Vereador")
-
-        governador = [c for c in candidates if c.role == "Governador"]
-        governador = cls._array_without_duplicate_candidate(governador)
-        if len(governador) > 0:
-            cls._plot_by_cargo(governador, grid, 2, 0, "Governador")
 
         presidente = [c for c in candidates if c.role == "Presidente"]
         presidente = cls._array_without_duplicate_candidate(presidente)
         if len(presidente) > 0:
-            cls._plot_by_cargo(presidente, grid, 0, 1, "Presidente")
+            cls._plot_by_cargo(presidente, grid, 0, 0, "Presidente")
 
-        deputado = [c for c in candidates if c.role == "Deputado"]
-        deputado = cls._array_without_duplicate_candidate(deputado)
-        if len(deputado) > 0:
-            cls._plot_by_cargo(deputado, grid, 1, 1, "Deputado")
-
-        fig1.suptitle('Votos Totalizados por Cargo', fontsize=20, fontweight='bold')
+        fig1.suptitle('Votos Totalizados para Presidente', fontsize=20, fontweight='bold')
 
         try:
             cls.pdf.savefig(fig1)
         except Exception, e:
             return "Erro ao Carregar Apuração, recarregue esse página"
+
+        for uev in uevs:
+            candidates = uev.getCandidates()
+
+            fig = plt.figure(figsize=(cls.width, 30))
+            grid = GridSpec(3, 2)
+
+            presidente = [c for c in candidates if c.role == "Presidente"]
+            presidente = cls._array_without_duplicate_candidate(presidente)
+            if len(presidente) > 0:
+                cls._plot_by_cargo(presidente, grid, 0, 1, "Presidente")
+
+            prefeito = [c for c in candidates if c.role == "Prefeito"]
+            prefeito = cls._array_without_duplicate_candidate(prefeito)
+
+            if len(prefeito) > 0:
+                cls._plot_by_cargo(prefeito, grid, 0, 0, "Prefeito")
+
+            vereador = [c for c in candidates if c.role == "Vereador"]
+            vereador = cls._array_without_duplicate_candidate(vereador)
+            if len(vereador) > 0:
+                cls._plot_by_cargo(vereador, grid, 1, 0, "Vereador")
+
+            governador = [c for c in candidates if c.role == "Governador"]
+            governador = cls._array_without_duplicate_candidate(governador)
+            if len(governador) > 0:
+                cls._plot_by_cargo(governador, grid, 2, 0, "Governador")
+
+            deputado = [c for c in candidates if c.role == "Deputado"]
+            deputado = cls._array_without_duplicate_candidate(deputado)
+            if len(deputado) > 0:
+                cls._plot_by_cargo(deputado, grid, 1, 1, "Deputado")
+
+            fig.suptitle('Votos da Uev ' + uev.region.state, fontsize=20, fontweight='bold')
+
+            try:
+                cls.pdf.savefig(fig)
+            except Exception, e:
+                return "Erro ao Carregar Apuração, recarregue esse página"
+
+
+
+
 
         plt.close()
         return "OK"
@@ -152,7 +173,8 @@ class Reports(object):
 
     @staticmethod
     def _remove_candidate_without_votes(candidates):
-        return [candidate for candidate in candidates if candidate.getTotalVotes() > 0]
+        return [candidate for candidate in candidates if candidate.getTotalVotes() > 0
+                and candidate.role == "Presidente"]
 
     @classmethod
     def _get_candidate_pies(cls, candidates, grid, c_size):

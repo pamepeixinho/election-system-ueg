@@ -19,7 +19,7 @@ regionList = [["Sao Paulo", "Sao Paulo", "Brasil"], ["Sao Bernardo do Campo", "S
 
 
 db = mysql.connector.connect(user='root',
-                              password='',
+                              password='xxxx',
                               host='127.0.0.1',
                               database='ueg')
 cursor = db.cursor()

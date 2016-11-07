@@ -17,6 +17,7 @@ class Elections(object):
             toleranceMinutesStart: tolerance time to do CT.Carregamento before election
             toleranceMinutesEnd: tolerance time to do CT.Recebimento after election
     """
+
     SP_zone = pytz.timezone('America/Sao_Paulo')
 
     def __init__(self, electionList=None):
@@ -61,9 +62,9 @@ class Elections(object):
         """
         d0 = ElectionDate(2016, 10, 29, 19, 10, 20, 0)
         d1 = ElectionDate(2016, 10, 31, 19, 30, 19, 0)
-        d2 = ElectionDate(2016, 11, 6, 19, 0, 18, 50)
+        d2 = ElectionDate(2016, 11, 7, 8, 30, 21, 0)
         d3 = ElectionDate(2016, 11, 5, 21, 40, 22, 10)
-        d4 = ElectionDate(2016, 11, 7, 18, 0, 20, 0)
+        d4 = ElectionDate(2016, 11, 7, 18, 0, 17, 55)
 
         list = [d0, d1, d2, d3, d4]
 

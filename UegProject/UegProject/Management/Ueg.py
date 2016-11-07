@@ -92,7 +92,7 @@ class Ueg(object):
 
         if len(candidates) != 0 and len(voters) != 0:
             t0 = Reports.initPdf()
-            t1 = Reports.report_total_votes(candidates)
+            t1 = Reports.report_total_votes(candidates, uevs=self.uevs)
             t2 = Reports.report_candidates_votes(candidates)
             t3 = Reports.report_no_show_voter(voters)
             filename = Reports.close_pdf()
