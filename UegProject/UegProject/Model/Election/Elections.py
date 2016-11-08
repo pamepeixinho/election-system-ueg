@@ -64,7 +64,7 @@ class Elections(object):
         d1 = ElectionDate(2016, 10, 31, 19, 30, 19, 0)
         d2 = ElectionDate(2016, 11, 7, 8, 30, 21, 0)
         d3 = ElectionDate(2016, 11, 5, 21, 40, 22, 10)
-        d4 = ElectionDate(2016, 11, 7, 18, 0, 17, 55)
+        d4 = ElectionDate(2016, 11, 7, 22, 0, 22, 35)
 
         list = [d0, d1, d2, d3, d4]
 

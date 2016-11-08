@@ -22,4 +22,4 @@ class Voter(object):
     def toJSON(self):
         return {'name': self.name,
                 'cpf': self.cpf,
-                'photoURL': self.photoUrl}
+                'photoURL': self.photoUrl if self.photoUrl != "" else None}

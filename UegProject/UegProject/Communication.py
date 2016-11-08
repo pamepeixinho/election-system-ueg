@@ -48,6 +48,10 @@ class Communication(object):
             return HttpResponse(ErrorCodes.WRONG_REQUEST)
 
         json_data = json.loads(request.body, parse_int=int)
+        print json_data
+        print json_data["username"]
+        print "username"
+        print json_data["password"]
 
         self.__verifyIfNew()
 
@@ -55,11 +59,13 @@ class Communication(object):
         if authenticated is not True:
             return HttpResponseForbidden('ERRO {0}'.format(authenticated))
 
+        print 'FILLVOTES'
         self.ueg.fillVotes(json_data["voters"], json_data["candidates"])
-
+        print 'FILLVOTES2'
         return HttpResponse('OK')
 
     def ascertainment(self, request):
+        # self.ueg = None
         self.__verifyIfNew()
 
         filename = self.ueg.ascertainment()
@@ -87,7 +93,7 @@ class Communication(object):
     def __getUevJson(self):
 
         uev_json = {
-            "electionEnd": self.ueg.endElectionToday.isoformat(),
+            "electionEnd": self.ueg.endElectionToday.time(),
             "voters": [v.toJSON() for v in self.ueg.getVotersPerUev()],
             "candidates": [c.toJSON() for c in self.ueg.getCandidatesPerUev()]
         }
